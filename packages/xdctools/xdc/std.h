@@ -94,7 +94,7 @@ typedef const char      *xdc_CString;   /* null terminated immutable string */
  * add the following option to your compiler's command line:
  *    -Dxdc_target_types__=ti/targets/std.h
  */
-#error xdc_target_types__ must be defined to name a target-specific header containing definitions of xdc_Int8, xdc_Int16, ...
+//#error xdc_target_types__ must be defined to name a target-specific header containing definitions of xdc_Int8, xdc_Int16, ...
 
 /* the following definitions are required to keep the compiler from
  * complaining about references to these types in the rest of this header;

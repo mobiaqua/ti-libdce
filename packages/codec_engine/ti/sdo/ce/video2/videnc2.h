@@ -36,96 +36,89 @@
  *
  */
 /*
- *  ======== viddec2.h ========
+ *  ======== videnc2.h ========
  */
 /**
- *  @file       ti/sdo/ce/video2/viddec2.h
+ *  @file       ti/sdo/ce/video2/videnc2.h
  *
- *  @brief      The VIDDEC2 video decoder interface.  Provides the user an
+ *  @brief      The VIDENC2 video encoder interface.  Provides the user an
  *              interface to create and interact with XDAIS algorithms that are
- *              compliant with the XDM-defined IVIDDEC2 video decoder
+ *              compliant with the XDM-defined IVIDENC2 video encoder
  *              interface.
  */
 /**
- *  @defgroup   ti_sdo_ce_video2_VIDDEC2    VIDDEC2 - Video Decoder Interface
+ *  @defgroup   ti_sdo_ce_video2_VIDENC2    VIDENC2 - Video Encoder Interface
  *
- *  This is the VIDDEC2 video decoder interface.  Several of the data
- *  types in this API are specified by the XDM interface; please see
+ *  This is the VIDENC2 video encoder interface.  Several of the data
+ *  types in this API are specified by the XDM IVIDENC2 interface; please see
  *  the XDM documentation for those details.
  */
 
-#ifndef ti_sdo_ce_video2_VIDDEC2_
-#define ti_sdo_ce_video2_VIDDEC2_
+#ifndef ti_sdo_ce_video2_VIDENC2_
+#define ti_sdo_ce_video2_VIDENC2_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <ti/xdais/dm/xdm.h>
-#include <ti/xdais/dm/ividdec2.h>
+#include <ti/xdais/dm/ividenc2.h>
 
 #include <ti/sdo/ce/Engine.h>
 #include <ti/sdo/ce/visa.h>
 #include <ti/sdo/ce/skel.h>
 
-/** @ingroup    ti_sdo_ce_video2_VIDDEC2 */
+/** @ingroup    ti_sdo_ce_video2_VIDENC2 */
 /*@{*/
 
-typedef IVIDDEC2_Status VIDDEC2_Status;       /**< @copydoc IVIDDEC2_Status */
+#define VIDENC2_EOK      IVIDENC2_EOK         /**< @copydoc IVIDENC2_EOK */
+#define VIDENC2_EFAIL    IVIDENC2_EFAIL       /**< @copydoc IVIDENC2_EFAIL */
 
-#define VIDDEC2_EOK      IVIDDEC2_EOK         /**< @copydoc IVIDDEC2_EOK */
-#define VIDDEC2_EFAIL    IVIDDEC2_EFAIL       /**< @copydoc IVIDDEC2_EFAIL */
+/** @copydoc IVIDENC2_EUNSUPPORTED */
+#define VIDENC2_EUNSUPPORTED IVIDENC2_EUNSUPPORTED
 
-/**< @copydoc IVIDDEC2_EUNSUPPORTED */
-#define VIDDEC2_EUNSUPPORTED IVIDDEC2_EUNSUPPORTED
+#define VIDENC2_ETIMEOUT VISA_ETIMEOUT       /**< @copydoc VISA_ETIMEOUT */
+#define VIDENC2_FOREVER  VISA_FOREVER        /**< @copydoc VISA_FOREVER */
 
-#define VIDDEC2_ETIMEOUT VISA_ETIMEOUT        /**< @copydoc VISA_ETIMEOUT */
-#define VIDDEC2_FOREVER  VISA_FOREVER         /**< @copydoc VISA_FOREVER */
 
 /**
  *  @brief      The VISA type
  */
-#define VIDDEC2_VISATYPE "ti.sdo.ce.video2.IVIDDEC2"
+#define VIDENC2_VISATYPE "ti.sdo.ce.video2.IVIDENC2"
 
 /**
  *  @brief      Name of stub functions. Use this name when registering the
- *              VIDDEC2_STUBS functions with Engine_addStubFxns.
+ *              VIDENC2_STUBS functions with Engine_addStubFxns.
  *
  *  @sa         Engine_addStubFxns
  */
-#define VIDDEC2_STUBSNAME "VIDDEC2_STUBS"
+#define VIDENC2_STUBSNAME "VIDENC2_STUBS"
 
 
 /**
- *  @brief      Opaque handle to a VIDDEC2 codec.
+ *  @brief      Opaque handle to a VIDENC2 codec.
  */
-typedef VISA_Handle VIDDEC2_Handle;
+typedef VISA_Handle VIDENC2_Handle;
 
-/**
- *  @brief      This structure defines the parameters necessary to create an
- *              instance of a video decoder object.
- */
-typedef struct IVIDDEC2_Params VIDDEC2_Params;
+/* The following are just wrapper typedefs */
 
-/**
- * @copydoc IVIDDEC2_InArgs
- */
-typedef IVIDDEC2_InArgs          VIDDEC2_InArgs;
+/** @copydoc IVIDENC2_Params */
+typedef struct IVIDENC2_Params VIDENC2_Params;
 
-/**
- * @copydoc IVIDDEC2_OutArgs
- */
-typedef IVIDDEC2_OutArgs         VIDDEC2_OutArgs;
+/** @copydoc IVIDENC2_InArgs */
+typedef IVIDENC2_InArgs VIDENC2_InArgs;
 
-/**
- * @copydoc IVIDDEC2_Cmd
- */
-typedef IVIDDEC2_Cmd             VIDDEC2_Cmd;
+/** @copydoc IVIDENC2_OutArgs */
+typedef IVIDENC2_OutArgs VIDENC2_OutArgs;
 
-/**
- * @copydoc IVIDDEC2_DynamicParams
- */
-typedef IVIDDEC2_DynamicParams   VIDDEC2_DynamicParams;
+/** @copydoc IVIDENC2_Cmd */
+typedef IVIDENC2_Cmd VIDENC2_Cmd;
+
+/** @copydoc IVIDENC2_DynamicParams */
+typedef IVIDENC2_DynamicParams VIDENC2_DynamicParams;
+
+/** @copydoc IVIDENC2_Status */
+typedef IVIDENC2_Status VIDENC2_Status;
 
 /** @cond INTERNAL */
 
@@ -133,43 +126,79 @@ typedef IVIDDEC2_DynamicParams   VIDDEC2_DynamicParams;
  *  @brief      An implementation of the skel interface; the skeleton side
  *              of the stubs.
  */
-extern SKEL_Fxns VIDDEC2_SKEL;
+extern SKEL_Fxns VIDENC2_SKEL;
 
 /**
- *  @brief      Implementation of the IVIDDEC2 interface that is run remotely.
+ *  @brief      Implementation of the IVIDENC interface that is run remotely.
  */
-extern IVIDDEC2_Fxns VIDDEC2_STUBS;
+extern IVIDENC2_Fxns VIDENC2_STUBS;
 
 /** @endcond */
 
 /**
- *  @brief      Definition of IVIDDEC2 codec class configurable parameters
+ *  @brief      Definition of IVIDENC2 codec class configurable parameters
  *
  *  @sa         VISA_getCodecClassConfig()
  */
-typedef struct IVIDDEC2_CodecClassConfig {
-    Bool manageInBufsCache     [ XDM_MAX_IO_BUFFERS ];
-    Bool manageOutBufsCache    [ XDM_MAX_IO_BUFFERS ];
-} IVIDDEC2_CodecClassConfig;
+typedef struct IVIDENC2_CodecClassConfig {
+    Bool manageInBufsPlaneDescCache[IVIDEO_MAX_NUM_PLANES];
+    Bool manageInBufsMetaPlaneDescCache[IVIDEO_MAX_NUM_METADATA_PLANES];
+    Bool manageOutBufsCache[XDM_MAX_IO_BUFFERS];
+} IVIDENC2_CodecClassConfig;
 
 
 /*
- *  ======== VIDDEC2_create ========
+ *  ======== VIDENC2_control ========
  */
 /**
- *  @brief      Create an instance of a video decoder algorithm.
+ *  @brief      Execute the control() method in this instance of a video
+ *              encoder algorithm.
+ *
+ *  @param[in]  handle  Handle to a created video encoder instance.
+ *  @param[in]  id      Command id for XDM control operation.
+ *  @param[in]  params  Runtime control parameters used for encoding.
+ *  @param[out] status  Status info upon completion of encode operation.
+ *
+ *  @pre        @c handle is a valid (non-NULL) video encoder handle
+ *              and the video encoder is in the created state.
+ *
+ *  @retval     #VIDENC2_EOK         Success.
+ *  @retval     #VIDENC2_EFAIL       Failure.
+ *  @retval     #VIDENC2_EUNSUPPORTED    The requested operation
+ *                                       is not supported.
+ *
+ *  @remark     This is a blocking call, and will return after the control
+ *              command has been executed.
+ *
+ *  @remark     If an error is returned, @c status->extendedError may
+ *              indicate further details about the error.  See
+ *              #VIDENC2_Status::extendedError for details.
+ *
+ *  @sa         VIDENC2_create()
+ *  @sa         VIDENC2_delete()
+ *  @sa         IVIDENC2_Fxns::process()
+ */
+extern Int32 VIDENC2_control(VIDENC2_Handle handle, VIDENC2_Cmd id,
+        VIDENC2_DynamicParams *params, VIDENC2_Status *status);
+
+
+/*
+ *  ======== VIDENC2_create ========
+ */
+/**
+ *  @brief      Create an instance of a video encoder algorithm.
  *
  *  Instance handles must not be concurrently accessed by multiple threads;
- *  each thread must either obtain its own handle (via VIDDEC2_create()) or
+ *  each thread must either obtain its own handle (via VIDENC2_create()) or
  *  explicitly serialize access to a shared handle.
  *
  *  @param[in]  e       Handle to an opened engine.
- *  @param[in]  name    String identifier of the type of video decoder
+ *  @param[in]  name    String identifier of the type of video encoder
  *                      to create.
  *  @param[in]  params  Creation parameters.
  *
  *  @retval     NULL            An error has occurred.
- *  @retval     non-NULL        The handle to the newly created video decoder
+ *  @retval     non-NULL        The handle to the newly created video encoder
  *                              instance.
  *
  *  @remarks    @c params is optional.  If it's not supplied, codec-specific
@@ -177,123 +206,95 @@ typedef struct IVIDDEC2_CodecClassConfig {
  *
  *  @remark     Depending on the configuration of the engine opened, this
  *              call may create a local or remote instance of the video
- *              decoder.
+ *              encoder.
  *
  *  @codecNameRemark
  *
  *  @sa         Engine_open()
- *  @sa         VIDDEC2_delete()
+ *  @sa         VIDENC2_delete()
  */
-extern VIDDEC2_Handle VIDDEC2_create(Engine_Handle e, String name,
-    VIDDEC2_Params *params);
+extern VIDENC2_Handle VIDENC2_create(Engine_Handle e, String name,
+    VIDENC2_Params *params);
 
 
 /*
- *  ======== VIDDEC2_process ========
+ *  ======== VIDENC2_delete ========
+ */
+/**
+ *  @brief      Delete the instance of a video encoder algorithm.
+ *
+ *  @param[in]  handle  Handle to a created video encoder instance.
+ *
+ *  @remark     Depending on the configuration of the engine opened, this
+ *              call may delete a local or remote instance of the video
+ *              encoder.
+ *
+ *  @pre        @c handle is a valid (non-NULL) handle which is
+ *              in the created state.
+ *
+ *  @post       All resources allocated as part of the VIDENC2_create()
+ *              operation (memory, DMA channels, etc.) are freed.
+ *
+ *  @sa         VIDENC2_create()
+ */
+extern Void VIDENC2_delete(VIDENC2_Handle handle);
+
+
+/*
+ *  ======== VIDENC2_process ========
  */
 /**
  *  @brief      Execute the process() method in this instance of a video
- *              decoder algorithm.
+ *              encoder algorithm.
  *
- *  @param[in]  handle  Handle to a created video decoder instance.
+ *  @param[in]  handle  Handle to a created video encoder instance.
  *  @param[in]  inBufs  A buffer descriptor containing input buffers.
  *  @param[out] outBufs A buffer descriptor containing output buffers.
  *  @param[in]  inArgs  Input Arguments.
  *  @param[out] outArgs Output Arguments.
  *
- *  @pre        @c handle is a valid (non-NULL) video decoder handle
- *              and the video decoder is in the created state.
+ *  @pre        @c handle is a valid (non-NULL) video encoder handle
+ *              and the video encoder is in the created state.
  *
- *  @retval     #VIDDEC2_EOK         Success.
- *  @retval     #VIDDEC2_EFAIL       Failure.
- *  @retval     #VIDDEC2_EUNSUPPORTED Unsupported request.
+ *  @retval     #VIDENC2_EOK         Success.
+ *  @retval     #VIDENC2_EFAIL       Failure.
+ *  @retval     #VIDENC2_EUNSUPPORTED    The requested operation
+ *                                       is not supported.
  *
- *  @remark     Since the VIDDEC2 decoder contains support for asynchronous
+ *  @remark     Since the VIDENC2 decoder contains support for asynchronous
  *              buffer submission and retrieval, this API becomes known as
  *              synchronous in nature.
  *
  *  @remark     This is a blocking call, and will return after the data
- *              has been decoded.
+ *              has been encoded.
  *
- *  @remark     The buffers supplied to VIDDEC2_process() may have constraints
+ *  @remark     The buffers supplied to VIDENC2_process() may have constraints
  *              put on them.  For example, in dual-processor, shared memory
  *              architectures, where the codec is running on a remote
  *              processor, the buffers may need to be physically contiguous.
  *              Additionally, the remote processor may place restrictions on
  *              buffer alignment.
  *
- *  @sa         VIDDEC2_create()
- *  @sa         VIDDEC2_delete()
- *  @sa         VIDDEC2_control()
- *  @sa         VIDDEC2_processAsync()
- *  @sa         VIDDEC2_processWait()
- *  @sa         IVIDDEC2_Fxns::process() - the reflected algorithm interface,
+ *  @remark     If an error is returned, @c outArgs->extendedError may
+ *              indicate further details about the error.  See
+ *              #VIDENC2_OutArgs::extendedError for details.
+ *
+ *  @sa         VIDENC2_create()
+ *  @sa         VIDENC2_delete()
+ *  @sa         VIDENC2_control()
+ *  @sa         VIDENC2_processAsync()
+ *  @sa         VIDENC2_processWait()
+ *  @sa         IVIDENC2_Fxns::process() - the reflected algorithm interface,
  *                                         which may contain further usage
  *                                         details.
  */
-extern Int32 VIDDEC2_process(VIDDEC2_Handle handle, XDM1_BufDesc *inBufs,
-    XDM_BufDesc *outBufs, VIDDEC2_InArgs *inArgs, VIDDEC2_OutArgs *outArgs);
+extern Int32 VIDENC2_process(VIDENC2_Handle handle, IVIDEO2_BufDesc *inBufs,
+        XDM2_BufDesc *outBufs, VIDENC2_InArgs *inArgs,
+        VIDENC2_OutArgs *outArgs);
 
 
 /*
- *  ======== VIDDEC2_control ========
- */
-/**
- *  @brief      Execute the control() method in this instance of a video
- *              decoder algorithm.
- *
- *  @param[in]  handle  Handle to a created video decoder instance.
- *  @param[in]  id      Command id for xDM control operation.
- *  @param[in]  params  Runtime control parameters used for decoding.
- *  @param[out] status  Status info upon completion of decode operation.
- *
- *  @pre        @c handle is a valid (non-NULL) video decoder handle
- *              and the video decoder is in the created state.
- *
- *  @retval     #VIDDEC2_EOK         Success.
- *  @retval     #VIDDEC2_EFAIL       Failure.
- *  @retval     #VIDDEC2_EUNSUPPORTED Unsupported request.
- *
- *  @remark     This is a blocking call, and will return after the control
- *              command has been executed.
- *
- *  @remark     If an error is returned, @c status->extendedError may
- *              indicate further details about the error.  See
- *              #VIDDEC2_Status::extendedError for details.
- *
- *  @sa         VIDDEC2_create()
- *  @sa         VIDDEC2_delete()
- *  @sa         IVIDDEC2_Fxns::process()
- */
-extern Int32 VIDDEC2_control(VIDDEC2_Handle handle, VIDDEC2_Cmd id,
-    VIDDEC2_DynamicParams *params, VIDDEC2_Status *status);
-
-
-/*
- *  ======== VIDDEC2_delete ========
- */
-/**
- *  @brief      Delete the instance of a video decoder algorithm.
- *
- *  @param[in]  handle  Handle to a created video decoder instance.
- *
- *  @remark     Depending on the configuration of the engine opened, this
- *              call may delete a local or remote instance of the video
- *              decoder.
- *
- *  @pre        @c handle is a valid (non-NULL) handle which is
- *              in the created state.
- *
- *  @post       All resources allocated as part of the VIDDEC2_create()
- *              operation (memory, DMA channels, etc.) are freed.
- *
- *  @sa         VIDDEC2_create()
- */
-extern Void VIDDEC2_delete(VIDDEC2_Handle handle);
-
-
-/*
- *  ======== VIDDEC2_processAsync ========
+ *  ======== VIDENC2_processAsync ========
  */
 /**
  *  @brief      Perform asynchronous submission to this instance of a video
@@ -308,40 +309,40 @@ extern Void VIDDEC2_delete(VIDDEC2_Handle handle);
  *  @pre        @c handle is a valid (non-NULL) video decoder handle
  *              and the video decoder is in the created state.
  *
- *  @retval     #VIDDEC2_EOK         Success.
- *  @retval     #VIDDEC2_EFAIL       Failure.
- *  @retval     #VIDDEC2_EUNSUPPORTED Unsupported request.
+ *  @retval     #VIDENC2_EOK         Success.
+ *  @retval     #VIDENC2_EFAIL       Failure.
+ *  @retval     #VIDENC2_EUNSUPPORTED Unsupported request.
  *
  *  @remark     This API is the asynchronous counterpart to the process()
  *              method.  It allows for buffer and argument submission without
  *              waiting for retrieval.  A response is retrieved using the
- *              VIDDEC2_processWait() API.
+ *              VIDENC2_processWait() API.
  *
- *  @remark     The buffers supplied to VIDDEC2_processAsync() may have
+ *  @remark     The buffers supplied to VIDENC2_processAsync() may have
  *              constraints put on them.  For example, in dual-processor,
  *              shared memory architectures, where the codec is running on a
  *              remote processor, the buffers may need to be physically
  *              contiguous.  Additionally, the remote processor may place
  *              restrictions on buffer alignment.
  *
- *  @sa         VIDDEC2_create()
- *  @sa         VIDDEC2_delete()
- *  @sa         VIDDEC2_control()
- *  @sa         VIDDEC2_process()
- *  @sa         VIDDEC2_processWait()
- *  @sa         IVIDDEC2_Fxns::process()
+ *  @sa         VIDENC2_create()
+ *  @sa         VIDENC2_delete()
+ *  @sa         VIDENC2_control()
+ *  @sa         VIDENC2_process()
+ *  @sa         VIDENC2_processWait()
+ *  @sa         IVIDENC2_Fxns::process()
  */
-extern XDAS_Int32 VIDDEC2_processAsync(VIDDEC2_Handle handle,
-    XDM1_BufDesc *inBufs, XDM_BufDesc *outBufs,
-    VIDDEC2_InArgs *inArgs, VIDDEC2_OutArgs *outArgs);
+extern XDAS_Int32 VIDENC2_processAsync(VIDENC2_Handle handle,
+        IVIDEO2_BufDesc *inBufs, XDM2_BufDesc *outBufs,
+        IVIDENC2_InArgs *inArgs, IVIDENC2_OutArgs *outArgs);
 
 
 /*
- *  ======== VIDDEC2_processWait ========
+ *  ======== VIDENC2_processWait ========
  */
 /**
  *  @brief      Wait for a return message from a previous invocation of
- *              VIDDEC2_processAsync() in this instance of an video decoder
+ *              VIDENC2_processAsync() in this instance of an video decoder
  *              algorithm.
  *
  *  @param[in]  handle  Handle to a created video decoder instance.
@@ -349,41 +350,41 @@ extern XDAS_Int32 VIDDEC2_processAsync(VIDDEC2_Handle handle,
  *  @param[out] outBufs A buffer descriptor containing output buffers.
  *  @param[in]  inArgs  Input Arguments.
  *  @param[out] outArgs Output Arguments.
- *  @param[in]  timeout Amount of "time" to wait (from 0 -> VIDDEC2_FOREVER)
+ *  @param[in]  timeout Amount of "time" to wait (from 0 -> #VIDENC2_FOREVER)
  *
  *  @pre        @c handle is a valid (non-NULL) video decoder handle
  *              and the video decoder is in the created state.
  *
- *  @retval     #VIDDEC2_EOK         Success.
- *  @retval     #VIDDEC2_EFAIL       Failure.
- *  @retval     #VIDDEC2_EUNSUPPORTED Unsupported request.
- *  @retval     #VIDDEC2_ETIMEOUT    Operation timed out.
+ *  @retval     #VIDENC2_EOK         Success.
+ *  @retval     #VIDENC2_EFAIL       Failure.
+ *  @retval     #VIDENC2_EUNSUPPORTED Unsupported request.
+ *  @retval     #VIDENC2_ETIMEOUT    Operation timed out.
  *
  *  @remark     This is a blocking call, and will return after the data
  *              has been decoded.
  *
  *  @remark     "Polling" is supported by using a timeout of 0.  Waiting
- *              forever is supported by using a timeout of VIDDEC2_EFOREVER.
+ *              forever is supported by using a timeout of #VIDENC2_FOREVER.
  *
  *  @remark     There must have previously been an invocation of the
- *              VIDDEC2_processAsync() API.
+ *              VIDENC2_processAsync() API.
  *
- *  @remark     The buffers supplied to VIDDEC2_processAsync() may have
+ *  @remark     The buffers supplied to VIDENC2_processAsync() may have
  *              constraints put on them.  For example, in dual-processor,
  *              shared memory architectures, where the codec is running on a
  *              remote processor, the buffers may need to be physically
  *              contiguous.  Additionally, the remote processor may place
  *              restrictions on buffer alignment.
  *
- *  @sa         VIDDEC2_create()
- *  @sa         VIDDEC2_delete()
- *  @sa         VIDDEC2_control()
- *  @sa         VIDDEC2_process()
- *  @sa         VIDDEC2_processAsync()
+ *  @sa         VIDENC2_create()
+ *  @sa         VIDENC2_delete()
+ *  @sa         VIDENC2_control()
+ *  @sa         VIDENC2_process()
+ *  @sa         VIDENC2_processAsync()
  */
-extern XDAS_Int32 VIDDEC2_processWait(VIDDEC2_Handle handle,
-    XDM1_BufDesc *inBufs, XDM_BufDesc *outBufs,
-    VIDDEC2_InArgs *inArgs, VIDDEC2_OutArgs *outArgs, UInt timeout);
+extern XDAS_Int32 VIDENC2_processWait(VIDENC2_Handle handle,
+        IVIDEO2_BufDesc *inBufs, XDM2_BufDesc *outBufs, IVIDENC2_InArgs *inArgs,
+        IVIDENC2_OutArgs *outArgs, UInt timeout);
 
 
 /*@}*/
