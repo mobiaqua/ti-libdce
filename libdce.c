@@ -43,7 +43,6 @@
 #include <omap_dce.h>
 #include <omap_drmif.h>
 #include <libdce.h>
-#define xdc__deprecated_types
 #include <xdc/std.h>
 #include <ti/sdo/ce/Engine.h>
 #include <ti/sdo/ce/video3/viddec3.h>

@@ -242,7 +242,7 @@ typedef xdc_UInt16      UInt16;
 typedef xdc_UInt32      UInt32;
 
 /* DEPRECATED Aliases */
-#if !defined(xdc__strict) && defined(xdc__deprecated_types)
+#if !defined(xdc__strict)
 #define _TI_STD_TYPES
 
 /* xdc_Arg is defined only in ti/targets/std.h; use IArg and UArg instead */
