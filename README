@@ -1,0 +1,9 @@
+= About Distributed Codec Engine - RPMSG =
+
+DCE is a library to remotely invoke the hw accellerated codecs on IVA-HD via a syslink/rcm shim layer.
+This provides access to the [http://processors.wiki.ti.com/index.php/Category:Codec_Engine Codec Engine]
+codec interface on the coprocessor (ducati/M3) from the host.
+
+It is similar in purpose to remote codec engine, although at the time RCE was not supported on OMAP4430,
+and DCE was a simple way to get the same result.
+They should be roughly interchangeable from the user's perspective.
