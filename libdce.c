@@ -67,6 +67,15 @@ typedef struct {
 
 uint32_t dce_debug = 3;
 
+#define TRACE(lvl, FMT,...)  do if ((lvl) >= dce_debug) { \
+        printf("%s:%d:\t%s\t" FMT "\n", __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__); \
+    } while (0)
+
+#define ERROR(FMT,...)   TRACE(4, "error: " FMT, ##__VA_ARGS__)
+#define INFO(FMT,...)    TRACE(3, "info: " FMT, ##__VA_ARGS__)
+#define DEBUG(FMT,...)   TRACE(2, "debug: " FMT, ##__VA_ARGS__)
+#define VERB(FMT,...)    TRACE(1, "verb: " FMT, ##__VA_ARGS__)
+
 void dce_set_fd(int dce_fd) { fd = dce_fd; }
 int dce_get_fd () { return fd; }
 
