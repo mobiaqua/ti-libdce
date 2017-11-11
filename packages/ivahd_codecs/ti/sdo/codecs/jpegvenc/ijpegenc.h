@@ -1,4 +1,35 @@
 /*
+ * Copyright (c) 2010 - 2016, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+/*
 ********************************************************************************
 * HDVICP2.0 Based JPEG Encoder
 *
@@ -25,13 +56,13 @@
 *
 * @version 0.3 (Aug 2010):Debug Trace & error Robustness support added[Vasudev]
 *
-* @version 0.4 (Dec 2010) : Added support for error recovery and error 
+* @version 0.4 (Dec 2010) : Added support for error recovery and error
 *                           robustness in case of data sync errors[Pavan]
 *
-* @version 0.5 (Nov 2011) : Added support for Minimum Quality factor 1 and  
+* @version 0.5 (Nov 2011) : Added support for Minimum Quality factor 1 and
 *                           Maximum Quality factor 100        [Naidu]
 *
-* @version 0.6 (Nov 2011) : Create and Dynamic Default structure are exposed to 
+* @version 0.6 (Nov 2011) : Create and Dynamic Default structure are exposed to
 *                           Application                       [Naidu]
 *
 * @version 0.7 (July 2012) : Added support to change marker position JPEG header
@@ -40,15 +71,15 @@
 * @version 0.8 (Sep 2012) : Added support for Rate Control and Privacy Masking
 *                           [Mahantesh]
 *
-* @version 2.2 (Dec 2012) : Added another value to IJPEGVENC_RateControlAlgo 
+* @version 2.2 (Dec 2012) : Added another value to IJPEGVENC_RateControlAlgo
 *                           enum to support run-time disabling of rate control
 *                           [Mahantesh]
-* @version 2.3 (May 2013) : Added error check for “non-multiple of 16” 
+* @version 2.3 (May 2013) : Added error check for “non-multiple of 16”
 *                           inputBufDesc->imagePitch [Naidu]
 *
-* @version 2.4 (Feb 2017) : Jpegencoder symbol conflicts 
+* @version 2.4 (Feb 2017) : Jpegencoder symbol conflicts
 *                           with Jpegdecoder [Prashanth Kumar]
-*                          
+*
 ********************************************************************************
 */
 
@@ -63,7 +94,7 @@
 #define IJPEGVENC_MAX_QUALITY_FACTOR      (100)
 #define IJPEGVENC_DEFAULT_QUALITY_FACTOR  (50)
 
-/** 
+/**
   Maximum number of PMs supported inside the frame.
 */
 #define IJPEGVENC_MAX_PM 36
@@ -82,13 +113,13 @@
 /*---------------------- data declarations -----------------------------------*/
 /**
 ********************************************************************************
-*  @struct IJPEGVENC_PrivacyMaskingInput  
+*  @struct IJPEGVENC_PrivacyMaskingInput
 *
 *  @brief  This structure defines the PM input parameters required by Encoder.
 *
-*  @param  listPM : List of regions to be privacy masked with their x and y 
+*  @param  listPM : List of regions to be privacy masked with their x and y
 *                   co-ordinates
-*                    
+*
 *  @param  noOfPrivacyMaskRegions: Number of PMs passed to codec
 *
 *  @param  lumaValueForPM : Y pixel value for privacy mask region
@@ -99,12 +130,12 @@
 ********************************************************************************
 */
 typedef struct IJPEGVENC_PrivacyMaskingInput{
-  XDM_Rect    listPM[IJPEGVENC_MAX_PM];   
+  XDM_Rect    listPM[IJPEGVENC_MAX_PM];
   XDAS_Int32  noOfPrivacyMaskRegions;
   XDAS_UInt8  lumaValueForPM;
   XDAS_UInt8  cbValueForPM;
   XDAS_UInt8  crValueForPM;
-  XDAS_UInt8  dummy;         
+  XDAS_UInt8  dummy;
 }IJPEGVENC_PrivacyMaskingInput;
 /**
 ********************************************************************************
@@ -121,152 +152,152 @@ typedef struct IJPEGVENC_Obj {
   struct IJPEGVENC_Fxns *fxns;
 } IJPEGVENC_Obj;
 /**
-******************************************************************************** 
+********************************************************************************
 *  @struct IJPEGVENC_RateControlParams
-*  @brief  This structure contains all the parameters which controls Rate 
+*  @brief  This structure contains all the parameters which controls Rate
           Control behavior
 
-*  @param  rateControlParamsPreset : 
+*  @param  rateControlParamsPreset :
           regarded @ IJPEGENC_DynamicParams::rateControlParams
-          This Preset controls the USER_DEFINED vs DEFAULT mode. if User is 
-          not aware about following fields, it should be set as 
+          This Preset controls the USER_DEFINED vs DEFAULT mode. if User is
+          not aware about following fields, it should be set as
           IJPEGVENC_RATECONTROLPARAMS_DEFAULT
-*  @param  scalingMatrixPreset  : 
+*  @param  scalingMatrixPreset  :
           ignored @ IJPEGENC_DynamicParams::rateControlParams
-          This Preset controls the USER_DEFINED vs DEFAULT mode. if User is 
-          not aware about following fields, it should be set as 
+          This Preset controls the USER_DEFINED vs DEFAULT mode. if User is
+          not aware about following fields, it should be set as
           IJPEG_SCALINGMATRIX_DEFAULT
-          
+
 *  @param  rcAlgo  : ignored @ IJPEGENC_DynamicParams::rateControlParams
-          This defines the rate control algorithm to be used. Only useful 
+          This defines the rate control algorithm to be used. Only useful
           if IVIDENC2::rateControlPreset is set as IVIDEO_USER_DEFINED
 
 *  @param  qpI  : regarded @ IJPEGENC_DynamicParams::rateControlParams
-          Initial Quantization Parameter for I/IDR frames. 
+          Initial Quantization Parameter for I/IDR frames.
           Valid Range is [-1, 51]
           -1 : Auto Initialization else other wise Initial QP.
-          when rateControlPreset = IVIDEO_NONE, this quantization parameter is 
-          used by the whole video frame/field 
+          when rateControlPreset = IVIDEO_NONE, this quantization parameter is
+          used by the whole video frame/field
 
 *  @param  qpMaxI  : regarded @ IJPEGENC_DynamicParams::rateControlParams
-          Maximum Quantization Parameter for I/IDR frame(s). Range [0 , 51]. 
+          Maximum Quantization Parameter for I/IDR frame(s). Range [0 , 51].
           Useful to control a minimum quality level
 
 *  @param  qpMinI  : regarded @ IJPEGENC_DynamicParams::rateControlParams
-          Minimum Quantization Parameter for I/IDR frame(s). Range [0 , 51]. 
+          Minimum Quantization Parameter for I/IDR frame(s). Range [0 , 51].
           Useful to control a maximum bit-rate level
 
 *  @param  qpP  : regarded @ IJPEGENC_DynamicParams::rateControlParams
           Initial Quantization Parameter for P frames. Valid Range is [-1, 51]
           -1 : Auto Initialization else other wise Initial QP.
-          when rateControlPreset = IVIDEO_NONE, this quantization parameter is 
-          used by the whole video frame/field 
+          when rateControlPreset = IVIDEO_NONE, this quantization parameter is
+          used by the whole video frame/field
 
 *  @param  qpMaxP  : regarded @ IJPEGENC_DynamicParams::rateControlParams
-          Maximum Quantization Parameter for inter frame(s). Range [0 , 51]. 
+          Maximum Quantization Parameter for inter frame(s). Range [0 , 51].
           Useful to control a minimum quality level
 
 *  @param  qpMinP  : regarded @ IJPEGENC_DynamicParams::rateControlParams
-          Minimum Quantization Parameter for inter frame(s). Range [0 , 51]. 
+          Minimum Quantization Parameter for inter frame(s). Range [0 , 51].
           Useful to control a maximum bit-rate level
 
 *  @param  qpOffsetB  : regarded @ IJPEGENC_DynamicParams::rateControlParams
-          Offset of B frames Quantization Parameter from P frames. 
+          Offset of B frames Quantization Parameter from P frames.
           Valid Range is [-1, 51]
           -1 : Auto Initialization else other wise user provided offset
       if after adding the qpOffsetB into qp of P frame it exceeds 51 then
       it is clipped to 51
-          when rateControlPreset = IVIDEO_NONE, this offset parameter is 
-          used by the whole video frame/field 
+          when rateControlPreset = IVIDEO_NONE, this offset parameter is
+          used by the whole video frame/field
 
 *  @param  qpMaxB  : regarded @ IJPEGENC_DynamicParams::rateControlParams
-          Maximum Quantization Parameter for B frame(s). Range [0 , 51]. 
+          Maximum Quantization Parameter for B frame(s). Range [0 , 51].
           Useful to control a minimum quality level
 
 *  @param  qpMinB  : regarded @ IJPEGENC_DynamicParams::rateControlParams
-          Minimum Quantization Parameter for B frame(s). Range [0 , 51]. 
+          Minimum Quantization Parameter for B frame(s). Range [0 , 51].
           Useful to control a maximum bit-rate level
 
 *  @param  allowFrameSkip: regarded @ IJPEGENC_DynamicParams::rateControlParams
-          Controls Frame Skip. 
-          non-zero means frames can be skipped to  achieve target bit-rate 
+          Controls Frame Skip.
+          non-zero means frames can be skipped to  achieve target bit-rate
           zero means frame can never be skipped
 
-*  @param  removeExpensiveCoeff : 
+*  @param  removeExpensiveCoeff :
           regarded @ IJPEGENC_DynamicParams::rateControlParams
-          Flag to Remove high frequency expensive coeffecients 
+          Flag to Remove high frequency expensive coeffecients
 
-*  @param  chromaQPIndexOffset  : 
+*  @param  chromaQPIndexOffset  :
           ignored @ IJPEGENC_DynamicParams::rateControlParams
-          Specifies offset to be added to luma QP for addressing QPC values 
-          table for chroma components. 
+          Specifies offset to be added to luma QP for addressing QPC values
+          table for chroma components.
           Valid value is between -12 and 12, (inclusive)
 
 *  @param  IPQualityFactor: ignored @ IJPEGENC_DynamicParams::rateControlParams
-          This provides configurality to control I frame Quality wrt to P frame. 
-          Higher Quality factor means I frame quality is given higher 
-          improtance compared to P frame. 
+          This provides configurality to control I frame Quality wrt to P frame.
+          Higher Quality factor means I frame quality is given higher
+          improtance compared to P frame.
           Refer IJPEGENC_FrameQualityFactor for possible values
 
-*  @param  initialBufferLevel  : 
+*  @param  initialBufferLevel  :
           ignored @ IJPEGENC_DynamicParams::rateControlParams
-          Initial Buffer level for HRD compliance. It informs that Hypothtical 
-          decoder can start after how much time. The value taken is the 
-          obsolute value of the HRD buffer size  For example if user want 
-          Hypothtical decoder to start taking out data from HRD buffer after 
-          half second then it should set initialBufferLevel = half of the 
-          HRD buffer size that is programmed. 
-          
+          Initial Buffer level for HRD compliance. It informs that Hypothtical
+          decoder can start after how much time. The value taken is the
+          obsolute value of the HRD buffer size  For example if user want
+          Hypothtical decoder to start taking out data from HRD buffer after
+          half second then it should set initialBufferLevel = half of the
+          HRD buffer size that is programmed.
+
 *  @param  HRDBufferSize : regarded @ IJPEGENC_DynamicParams::rateControlParams
-          Hypothetical Reference Decoder Buffer Size. This size controls the 
-          frame skip  logic of the encoder. for low delay applications this 
+          Hypothetical Reference Decoder Buffer Size. This size controls the
+          frame skip  logic of the encoder. for low delay applications this
           size should be small. Unit of this variable is bits
 
 *  @param  minPicSizeRatio:regarded @ IJPEGENC_DynamicParams::rateControlParams
-                            This ratio is used to compute minimum picture size 
-                            in the following manner, 
+                            This ratio is used to compute minimum picture size
+                            in the following manner,
                             minPicSize = averagePicSize >> minPicSizeRatio
-                            allowed values 1 to 4, Setting this to 0 will enable 
-                            encoder chosen ratio.  
-                            Note that this is guided value to rate control to 
-                            determine min picture size and encoder may not 
+                            allowed values 1 to 4, Setting this to 0 will enable
+                            encoder chosen ratio.
+                            Note that this is guided value to rate control to
+                            determine min picture size and encoder may not
                             strictly follow this
 *  @param  maxPicSizeRatio:regarded @ IJPEGENC_DynamicParams::rateControlParams
                             To determines ratio for max picture size
-                            This ratio is used to compute maximum picture size 
-                            in the following manner, 
+                            This ratio is used to compute maximum picture size
+                            in the following manner,
                             maxPicSize = averagePicSize * maxPicSizeRatio
-                            allowed values 2 to 30.Setting this to 0 and 1 
-                            will enable encoder chosen ratio.  
-                            Note that this is guided value to rate control 
-                            to determine max picture size and encoder may not 
+                            allowed values 2 to 30.Setting this to 0 and 1
+                            will enable encoder chosen ratio.
+                            Note that this is guided value to rate control
+                            to determine max picture size and encoder may not
                             strictly follow this.
 
 *  @param  enablePRC     : regarded @ IJPEGENC_DynamicParams::rateControlParams
-                            This flag is used to control allowing PRC in the 
+                            This flag is used to control allowing PRC in the
                             frame
 
 *  @param  enablePartialFrameSkip : regarded @ IJPEGENC_DynamicParams::
                                  rateControlParams
-                            This flag is used to control allowing partial frame  
+                            This flag is used to control allowing partial frame
                             skip in the frame
 *  @param  reserved : 16 bit word, kept to not change the foot print
-*  @param  VBRDuration : During over which statistics during interval are  
-                        collected to switch bit-rate states.Increasing this  
-                        value will make VBR wait for longer time before 
+*  @param  VBRDuration : During over which statistics during interval are
+                        collected to switch bit-rate states.Increasing this
+                        value will make VBR wait for longer time before
                         switching bit-rate state
-*  @param  VBRsensitivity : Specifies the target bitrate used by rate control in 
-                           high complexity state. 
-*  @param  skipDistributionWindowLength : Number of frames over which the skip  
-                                         frames can be distributed  
-*  @param  numSkipInDistributionWindow : Number of skips allowed within the 
-                                         distribution window 
+*  @param  VBRsensitivity : Specifies the target bitrate used by rate control in
+                           high complexity state.
+*  @param  skipDistributionWindowLength : Number of frames over which the skip
+                                         frames can be distributed
+*  @param  numSkipInDistributionWindow : Number of skips allowed within the
+                                         distribution window
 *  @param  reservedRC
-          Some part is kept reserved to add parameters later without 
+          Some part is kept reserved to add parameters later without
           changing the foot print of  interface memory
 
 *  @todo  More parameters to be added : delay (VBV), PRC related etc..
-********************************************************************************  
+********************************************************************************
 */
 
 typedef struct IJPEGVENC_RateControlParams {
@@ -288,12 +319,12 @@ typedef struct IJPEGVENC_RateControlParams {
   XDAS_Int8  IPQualityFactor         ;
   XDAS_Int32 initialBufferLevel      ;
   XDAS_Int32 HRDBufferSize           ;
-  XDAS_Int16 minPicSizeRatioI        ; 
-  XDAS_Int16 maxPicSizeRatioI        ; 
-  XDAS_Int16 minPicSizeRatioP        ; 
-  XDAS_Int16 maxPicSizeRatioP        ; 
-  XDAS_Int16 minPicSizeRatioB        ; 
-  XDAS_Int16 maxPicSizeRatioB        ; 
+  XDAS_Int16 minPicSizeRatioI        ;
+  XDAS_Int16 maxPicSizeRatioI        ;
+  XDAS_Int16 minPicSizeRatioP        ;
+  XDAS_Int16 maxPicSizeRatioP        ;
+  XDAS_Int16 minPicSizeRatioB        ;
+  XDAS_Int16 maxPicSizeRatioB        ;
   XDAS_Int8  enablePRC               ;
   XDAS_Int8  enablePartialFrameSkip  ;
   XDAS_Int8  discardSavedBits        ;
@@ -305,7 +336,7 @@ typedef struct IJPEGVENC_RateControlParams {
   XDAS_Int8  enableHRDComplianceMode ;
   XDAS_Int32 frameSkipThMulQ5        ;
   XDAS_Int32 vbvUseLevelThQ5         ;
-  XDAS_Int32 reservedRC[3]           ; 
+  XDAS_Int32 reservedRC[3]           ;
 
 } IJPEGVENC_RateControlParams ;
 
@@ -338,40 +369,40 @@ typedef struct IJPEGVENC_Status {
 
   /*--------------------------------------------------------------------------*/
   /* base address of the trace buffer in external memory                      */
-  /*--------------------------------------------------------------------------*/  
+  /*--------------------------------------------------------------------------*/
   XDAS_UInt32 * extMemoryDebugTraceAddr;
-  
+
   /*--------------------------------------------------------------------------*/
   /* Size of the trace buffer                                                 */
-  /*--------------------------------------------------------------------------*/    
+  /*--------------------------------------------------------------------------*/
   XDAS_UInt32 extMemoryDebugTraceSize;
 
   /*--------------------------------------------------------------------------*/
   /* Extended Error Code0 returned by encoder                                 */
   /*--------------------------------------------------------------------------*/
   XDAS_UInt32 extendedErrorCode0;
-  
+
   /*--------------------------------------------------------------------------*/
   /* Extended Error Code1 returned by encoder                                 */
   /*--------------------------------------------------------------------------*/
   XDAS_UInt32 extendedErrorCode1;
-  
+
   /*--------------------------------------------------------------------------*/
   /* Extended Error Code2 returned by encoder                                 */
   /*--------------------------------------------------------------------------*/
   XDAS_UInt32 extendedErrorCode2;
-  
+
   /*--------------------------------------------------------------------------*/
   /* Extended Error Code3 returned by encoder                                 */
   /*--------------------------------------------------------------------------*/
-  XDAS_UInt32 extendedErrorCode3;  
+  XDAS_UInt32 extendedErrorCode3;
   /*--------------------------------------------------------------------------*/
   /* Rate control param structure                                             */
   /*--------------------------------------------------------------------------*/
   IJPEGVENC_RateControlParams rateControlParams;
   /*--------------------------------------------------------------------------*/
   /* Flag to enable Privacy Masking                                           */
-  /*--------------------------------------------------------------------------*/  
+  /*--------------------------------------------------------------------------*/
   XDAS_Int32  enablePrivacyMasking;
 
 } IJPEGVENC_Status;
@@ -401,7 +432,7 @@ typedef struct IJPEGVENC_Params {
   /* Base Class                                                               */
   /*--------------------------------------------------------------------------*/
   IVIDENC2_Params videnc2Params;
-  
+
   /*--------------------------------------------------------------------------*/
   /* Max Horizontal resolution for APP0 thumbnail                             */
   /*--------------------------------------------------------------------------*/
@@ -411,7 +442,7 @@ typedef struct IJPEGVENC_Params {
   /* Max Vertical resolution for APP0 thumbnail                               */
   /*--------------------------------------------------------------------------*/
   XDAS_UInt16     maxThumbnailVSizeApp0;
-  
+
   /*--------------------------------------------------------------------------*/
   /* Max Horizontal resolution for APP1 thumbnail                             */
   /*--------------------------------------------------------------------------*/
@@ -430,7 +461,7 @@ typedef struct IJPEGVENC_Params {
   /*--------------------------------------------------------------------------*/
   /*History of last N frames                                                  */
   /*--------------------------------------------------------------------------*/
-  XDAS_UInt32   lastNFramesToLog;  
+  XDAS_UInt32   lastNFramesToLog;
   /*--------------------------------------------------------------------------*/
   /*Marker positions modification                                             */
   /*--------------------------------------------------------------------------*/
@@ -439,7 +470,7 @@ typedef struct IJPEGVENC_Params {
   /* Rate control param structure                                             */
   /*--------------------------------------------------------------------------*/
   IJPEGVENC_RateControlParams rateControlParams;
-  
+
 } IJPEGVENC_Params;
 
 typedef IVIDENC2_Cmd IJPEGVENC_Cmd;
@@ -514,7 +545,7 @@ typedef struct IJPEGVENC_DynamicParams {
   /* Base Class                                                               */
   /*--------------------------------------------------------------------------*/
   IVIDENC2_DynamicParams videnc2DynamicParams;
-  
+
   /*--------------------------------------------------------------------------*/
   /* restartInterval : Specifies the number of MCUs between RST markers       */
   /*--------------------------------------------------------------------------*/
@@ -542,7 +573,7 @@ typedef struct IJPEGVENC_DynamicParams {
   /* Flag to enable Privacy Masking                                           */
   /*--------------------------------------------------------------------------*/
   XDAS_UInt32             enablePrivacyMasking;
-  
+
 } IJPEGVENC_DynamicParams;
 
 /**
@@ -567,7 +598,7 @@ typedef struct IJPEGVENC_InArgs {
   /* Base Class                                                               */
   /*--------------------------------------------------------------------------*/
   IVIDENC2_InArgs videnc2InArgs;
-  
+
   /*--------------------------------------------------------------------------*/
   /* APPN0 : buffer holding the data for APP-0 Marker                         */
   /*--------------------------------------------------------------------------*/
@@ -592,7 +623,7 @@ typedef struct IJPEGVENC_InArgs {
   /* Comment : buffer holding the data for comment Marker                     */
   /*--------------------------------------------------------------------------*/
   XDM2_SingleBufDesc  Comment;
-  
+
   /*--------------------------------------------------------------------------*/
   /* Privacy Masking Params                                                   */
   /*--------------------------------------------------------------------------*/
@@ -607,7 +638,7 @@ typedef struct IJPEGVENC_InArgs {
 *  @brief  This structure defines the runtime output arguments
 *          for IJPEGVENC::process
 *
-*  @param  videnc2OutArgs : This structure contains run time output arguments 
+*  @param  videnc2OutArgs : This structure contains run time output arguments
 *                           for all IVIDENC2 instance objects
 *  @param  vbvBufferLevel : This varible tells the buffer level at the end
 *                           of every picture from decoder perspective.
@@ -634,22 +665,22 @@ typedef struct IJPEGVENC_Fxns {
 } IJPEGVENC_Fxns;
 
 /**
- * The error codes correspond to the 32-bit extended error parameter passed 
- * through outargs and get sttus. The error have been categorised to the below 
+ * The error codes correspond to the 32-bit extended error parameter passed
+ * through outargs and get sttus. The error have been categorised to the below
  * 32 groups and the respective bit is set on error occurrence.
  */
 typedef enum
 {
   IJPEGVENC_ERR_UNSUPPORTED_VIDENC2PARAMS = 0,
-  IJPEGVENC_ERR_UNSUPPORTED_VIDENC2DYNAMICPARAMS,            
-  IJPEGVENC_ERR_UNSUPPORTED_JPEGENCDYNAMICPARAMS,              
-  IJPEGVENC_ERR_IMPROPER_DATASYNC_SETTING,      
-  IJPEGVENC_ERR_NOSLICE,     
-  IJPEGVENC_ERR_SLICEHDR,            
-  IJPEGVENC_ERR_MBDATA,            
-  IJPEGVENC_ERR_UNSUPPFEATURE,     
-  IJPEGVENC_ERR_STREAM_END = 16,            
-  IJPEGVENC_ERR_INVALID_MBOX_MESSAGE,    
+  IJPEGVENC_ERR_UNSUPPORTED_VIDENC2DYNAMICPARAMS,
+  IJPEGVENC_ERR_UNSUPPORTED_JPEGENCDYNAMICPARAMS,
+  IJPEGVENC_ERR_IMPROPER_DATASYNC_SETTING,
+  IJPEGVENC_ERR_NOSLICE,
+  IJPEGVENC_ERR_SLICEHDR,
+  IJPEGVENC_ERR_MBDATA,
+  IJPEGVENC_ERR_UNSUPPFEATURE,
+  IJPEGVENC_ERR_STREAM_END = 16,
+  IJPEGVENC_ERR_INVALID_MBOX_MESSAGE,
   IJPEGVENC_ERR_HDVICP_RESET,
   IJPEGVENC_ERR_HDVICP_WAIT_NOT_CLEAN_EXIT,
   IJPEGVENC_ERR_IRES_RESHANDLE,
@@ -658,15 +689,15 @@ typedef enum
   /* Error Codes for Data Sync */
   IJPEGVENC_ERR_INPUT_DATASYNC,
   IJPEGVENC_ERR_OUTPUT_DATASYNC,
-  
+
   IJPEG_ERR_PRIVACY_MASKING_PARAMS,
   IJPEG_ERR_RATECONTROLPARAMS
 }IJPEGVENC_ExtendedErrorCodes;
 
 /**
- * The enum corresponds to the 4 32-bit words used to pass the error codes to 
- * the application in the extended parameters of status stucture through the 
- * getstatus command. Each bit is set for an error which falls under one of 
+ * The enum corresponds to the 4 32-bit words used to pass the error codes to
+ * the application in the extended parameters of status stucture through the
+ * getstatus command. Each bit is set for an error which falls under one of
  * the groups in the outargs 32 bvits.
  */
 typedef enum
@@ -704,12 +735,12 @@ typedef enum
   IJPEGVENC_INVALID_JFIF_THUMBNAIL_ENABLE_ERROR,
   IJPEGVENC_INVALID_EXIF_THUMBNAIL_ENABLE_ERROR,
   IJPEGVENC_INPUT_BUFFER_POINTER_ALIGN_ERROR,
-  
+
   /* Extended Error Codes related to Data Sync */
   IJPEGVENC_DATASYNC_GET_ROW_DATA_ERROR, /* from 33rd bit*/
-  
+
   IJPEGVENC_DATASYNC_INVALID_RESTART_INTERVAL_ERROR,
-  
+
   IJPEGVENC_DATASYNC_BLOCK_POINTER_ERROR,
   IJPEGVENC_DATASYNC_BLOCK_SIZE_ERROR,
   IJPEGVENC_DATASYNC_INVALID_BLOCKS_ERROR,
@@ -719,18 +750,18 @@ typedef enum
 
 /**
   @enum   IJPEGVENC_RateControlParamsPreset
-  @brief  These enumerations control the RateControl Params  
+  @brief  These enumerations control the RateControl Params
 */
 
 typedef enum
 {
-  IJPEGVENC_RATECONTROLPARAMS_DEFAULT     = 0 , 
+  IJPEGVENC_RATECONTROLPARAMS_DEFAULT     = 0 ,
       /**< Default Rate Control params */
-  IJPEGVENC_RATECONTROLPARAMS_USERDEFINED = 1 , 
+  IJPEGVENC_RATECONTROLPARAMS_USERDEFINED = 1 ,
       /**< User defined Rate Control params */
-  IJPEGVENC_RATECONTROLPARAMS_EXISTING    = 2 , 
-      /**< Keep the Rate Control params as existing. This is 
-      * useful because during control call if user don't want 
+  IJPEGVENC_RATECONTROLPARAMS_EXISTING    = 2 ,
+      /**< Keep the Rate Control params as existing. This is
+      * useful because during control call if user don't want
       * to change the Rate Control Params
       */
   IJPEGVENC_RATECONTROLPARAMS_MAX
@@ -739,7 +770,7 @@ typedef enum
 
 /**
   @enum   IJPEGVENC_PrivacyMaskingInputParams
-  @brief  These enumerations control the Privacy Masking Params  
+  @brief  These enumerations control the Privacy Masking Params
 */
 typedef enum
 {
@@ -750,21 +781,21 @@ typedef enum
 }IJPEGVENC_PrivacyMaskingInputParams;
 
 /**
-  
+
   @enum   IJPEGVENC_RateControlAlgo
   @brief  These enumerations control the type of rateControl algo to be picked
-          up by encoder. Only useful if IVIDENC2::rateControlPreset is set as 
+          up by encoder. Only useful if IVIDENC2::rateControlPreset is set as
           IVIDEO_USER_DEFINED
-  
+
 */
 typedef enum
 {
-  IJPEGVENC_RATECONTROL_VBR_STORAGE       = 0 ,        
+  IJPEGVENC_RATECONTROL_VBR_STORAGE       = 0 ,
   /** VBR - Storage Rate Control   */
-  IJPEGVENC_RATECONTROL_CBR_LOW_DELAY     = 1 ,        
+  IJPEGVENC_RATECONTROL_CBR_LOW_DELAY     = 1 ,
   /** CBR - Low Delay Rate Control */
   IJPEGVENC_RATECONTROL_DISABLE           = 2
-  /** Disable Rate Control */  
+  /** Disable Rate Control */
 } IJPEGVENC_RateControlAlgo;
 /**
 ******************************************************************************

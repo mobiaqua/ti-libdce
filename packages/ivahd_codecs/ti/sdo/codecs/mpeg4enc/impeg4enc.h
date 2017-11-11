@@ -1,4 +1,36 @@
 /*
+ * Copyright (c) 2010, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/*
 ********************************************************************************
  * HDVICP2.0 Based MPEG4 SP Encoder
  *
@@ -22,8 +54,8 @@
  *                           [Venugopala Krishna]
  * @version 0.1 (Apr 2009) : Updated version.
  *                           [Radhesh Bhat]
- * @version 0.2 (April 2013) : Enum added for create time param - 
- *                             insertGOVHdrBeforeIframe - to support VOL 
+ * @version 0.2 (April 2013) : Enum added for create time param -
+ *                             insertGOVHdrBeforeIframe - to support VOL
  *                             encoding for every I-frame [Mahantesh]
  *******************************************************************************
 */
@@ -104,96 +136,96 @@ extern "C" {
  *
  *******************************************************************************
 */
-    typedef enum {
-         IMPEG4ENC_LEVEL_INCOMPLAINT_PARAMETER = 0,
-          /**< Bit 0 - level incomplaint parameters.
-          *   @remarks  This error is applicable when some parameters are set
-          *             which are not meeting the limits set by MPEG4 standard
-          */
+typedef enum {
+    IMPEG4ENC_LEVEL_INCOMPLAINT_PARAMETER = 0,
+    /**< Bit 0 - level incomplaint parameters.
+    *   @remarks  This error is applicable when some parameters are set
+    *             which are not meeting the limits set by MPEG4 standard
+    */
 
-        IMPEG4ENC_PROFILE_INCOMPLAINT_CONTENTTYPE = 1,
-          /**< Bit 1 - Profile incomplaint content type.
-          *   @remarks  This error is applicable when
-          *             IVIDENC2_Params::inputContentType is not set as
-          *             IVIDEO_PROGRESSIVE but IVIDENC2_Params::profile is set
-          *             as IMPEG4_SIPPLE_PROFILE
-          */
+    IMPEG4ENC_PROFILE_INCOMPLAINT_CONTENTTYPE = 1,
+    /**< Bit 1 - Profile incomplaint content type.
+    *   @remarks  This error is applicable when
+    *             IVIDENC2_Params::inputContentType is not set as
+    *             IVIDEO_PROGRESSIVE but IVIDENC2_Params::profile is set
+    *             as IMPEG4_SIPPLE_PROFILE
+    */
 
-        IMPEG4ENC_IMPROPER_HDVICP2_STATE = 16, 
-          /**< Bit 16 - Device is not proper state to use.
-          */
+    IMPEG4ENC_IMPROPER_HDVICP2_STATE = 16,
+    /**< Bit 16 - Device is not proper state to use.
+    */
 
-        IMPEG4ENC_WARNING_H263_PLUS_CUSTOM_SOURCE_FORMAT = 17, 
-          /**< Bit 17 - Indication that the input resolution given to codec
-          *             is custom source format supported in H.263+ not the
-          *             standard resolutions supported with H263 baseline or
-          *             MPEG4 with short video header.
-          */
-          
-        IMPEG4ENC_ERROR_BITSTREAM_MEMORY_INSUFFICIENT = 18,
-          /**< Bit 18 - Indication that the buffer given to codec from 
-           *            getBuffer function is insufficient so that codec
-           *            cannot continue encoding. It means that if return value
-           *            from getBuffer function is -1, then this bit gets set
-           *            by the codec. This is the situation where application 
-           *            might not be able to provide memory to codec.
-          */  
+    IMPEG4ENC_WARNING_H263_PLUS_CUSTOM_SOURCE_FORMAT = 17,
+    /**< Bit 17 - Indication that the input resolution given to codec
+    *             is custom source format supported in H.263+ not the
+    *             standard resolutions supported with H263 baseline or
+    *             MPEG4 with short video header.
+    */
 
-        IMPEG4ENC_IMPROPER_DATASYNC_SETTING = 19,
-          /**< Bit 19 - data synch settings are not proper
-          *   @remarks  This error is set when encoder is asked to operate
-          *             at sub frame level but the call back function pointer 
-          *             is  NULL
-          */
+    IMPEG4ENC_ERROR_BITSTREAM_MEMORY_INSUFFICIENT = 18,
+    /**< Bit 18 - Indication that the buffer given to codec from
+     *            getBuffer function is insufficient so that codec
+     *            cannot continue encoding. It means that if return value
+     *            from getBuffer function is -1, then this bit gets set
+     *            by the codec. This is the situation where application
+     *            might not be able to provide memory to codec.
+    */
 
-        IMPEG4ENC_UNSUPPORTED_VIDENC2PARAMS = 20,
-          /**< Bit 20 - Invalid videnc2 parameters
-          *   @remarks  This error is set when any parameter of struct
-          *             IVIDENC2_Params is not in allowed range
-          */
+    IMPEG4ENC_IMPROPER_DATASYNC_SETTING = 19,
+    /**< Bit 19 - data synch settings are not proper
+    *   @remarks  This error is set when encoder is asked to operate
+    *             at sub frame level but the call back function pointer
+    *             is  NULL
+    */
 
-        IMPEG4ENC_UNSUPPORTED_RATECONTROLPARAMS = 21,
-          /**< Bit 21 - Invalid rate control parameters
-          *   @remarks  This error is set when any parameter of struct
-          *             IMPEG4ENC_RateControlParams is not in allowed range
-          */
+    IMPEG4ENC_UNSUPPORTED_VIDENC2PARAMS = 20,
+    /**< Bit 20 - Invalid videnc2 parameters
+    *   @remarks  This error is set when any parameter of struct
+    *             IVIDENC2_Params is not in allowed range
+    */
 
-        IMPEG4ENC_UNSUPPORTED_INTERCODINGPARAMS = 22,
-          /**< Bit 22 - Invalid inter coding parameters
-          *   @remarks  This error is set when any parameter of struct
-          *             IMPEG4ENC_InterCodingParams is not in allowed range
-          */
+    IMPEG4ENC_UNSUPPORTED_RATECONTROLPARAMS = 21,
+    /**< Bit 21 - Invalid rate control parameters
+    *   @remarks  This error is set when any parameter of struct
+    *             IMPEG4ENC_RateControlParams is not in allowed range
+    */
 
-        IMPEG4ENC_UNSUPPORTED_INTRACODINGPARAMS = 23,
-          /**< Bit 23 - Invalid Intra coding parameters
-          *   @remarks  This error is set when any parameter of struct
-          *             IMPEG4ENC_IntraCodingParams is not in allowed range
-          */
+    IMPEG4ENC_UNSUPPORTED_INTERCODINGPARAMS = 22,
+    /**< Bit 22 - Invalid inter coding parameters
+    *   @remarks  This error is set when any parameter of struct
+    *             IMPEG4ENC_InterCodingParams is not in allowed range
+    */
 
-        IMPEG4ENC_UNSUPPORTED_SLICECODINGPARAMS = 25,
-          /**< Bit 25 - Invalid slice coding parameters
-          *   @remarks  This error is set when any parameter of struct
-          *             IMPEG4ENC_SliceControlParams is not in allowed range
-          */
+    IMPEG4ENC_UNSUPPORTED_INTRACODINGPARAMS = 23,
+    /**< Bit 23 - Invalid Intra coding parameters
+    *   @remarks  This error is set when any parameter of struct
+    *             IMPEG4ENC_IntraCodingParams is not in allowed range
+    */
 
-        IMPEG4ENC_UNSUPPORTED_MPEG4ENCPARAMS = 29,
-          /**< Bit 29 - Invalid Create time extended parameters
-          *   @remarks  This error is set when any parameter of struct
-          *             IMPEG4ENC_CreateParams is not in allowed range
-          */
+    IMPEG4ENC_UNSUPPORTED_SLICECODINGPARAMS = 25,
+    /**< Bit 25 - Invalid slice coding parameters
+    *   @remarks  This error is set when any parameter of struct
+    *             IMPEG4ENC_SliceControlParams is not in allowed range
+    */
 
-        IMPEG4ENC_UNSUPPORTED_VIDENC2DYNAMICPARAMS = 30,
-          /**< Bit 30 - Invalid base class dyanmic parameters during control
-          *   @remarks  This error is set when any parameter of struct
-          *             IVIDENC2_DynamicParams is not in allowed range
-          */
+    IMPEG4ENC_UNSUPPORTED_MPEG4ENCPARAMS = 29,
+    /**< Bit 29 - Invalid Create time extended parameters
+    *   @remarks  This error is set when any parameter of struct
+    *             IMPEG4ENC_CreateParams is not in allowed range
+    */
 
-        IMPEG4ENC_UNSUPPORTED_MPEG4ENCDYNAMICPARAMS = 31
-          /**< Bit 31 -Invalid extended class dyanmic parameters during control
-          *   @remarks  This error is set when any parameter of struct
-          *             IMPEG4ENC_DynamicParams (excluding embedded structures)
-          *             is not in allowed range
-          */
+    IMPEG4ENC_UNSUPPORTED_VIDENC2DYNAMICPARAMS = 30,
+    /**< Bit 30 - Invalid base class dyanmic parameters during control
+    *   @remarks  This error is set when any parameter of struct
+    *             IVIDENC2_DynamicParams is not in allowed range
+    */
+
+    IMPEG4ENC_UNSUPPORTED_MPEG4ENCDYNAMICPARAMS = 31
+                                                  /**< Bit 31 -Invalid extended class dyanmic parameters during control
+                                                  *   @remarks  This error is set when any parameter of struct
+                                                  *             IMPEG4ENC_DynamicParams (excluding embedded structures)
+                                                  *             is not in allowed range
+                                                  */
 
 } IMPEG4ENC_ErrorBit;
 
@@ -208,21 +240,21 @@ extern "C" {
  *******************************************************************************
 */
 typedef enum {
-  IMPEG4ENC_SP_LEVEL_0   = 0,    /**< MPEG4 Simple Profile Level 0 */
+    IMPEG4ENC_SP_LEVEL_0   = 0,  /**< MPEG4 Simple Profile Level 0 */
 
-  IMPEG4ENC_SP_LEVEL_0B  = 9,    /**< MPEG4 Simple Profile Level 0b*/
+    IMPEG4ENC_SP_LEVEL_0B  = 9,  /**< MPEG4 Simple Profile Level 0b*/
 
-  IMPEG4ENC_SP_LEVEL_1   = 1,    /**< MPEG4 Simple Profile Level 1 */
+    IMPEG4ENC_SP_LEVEL_1   = 1,  /**< MPEG4 Simple Profile Level 1 */
 
-  IMPEG4ENC_SP_LEVEL_2   = 2,    /**< MPEG4 Simple Profile Level 2 */
+    IMPEG4ENC_SP_LEVEL_2   = 2,  /**< MPEG4 Simple Profile Level 2 */
 
-  IMPEG4ENC_SP_LEVEL_3   = 3,    /**< MPEG4 Simple Profile Level 3 */
+    IMPEG4ENC_SP_LEVEL_3   = 3,  /**< MPEG4 Simple Profile Level 3 */
 
-  IMPEG4ENC_SP_LEVEL_4A  = 4,    /**< MPEG4 Simple Profile Level 4a*/
+    IMPEG4ENC_SP_LEVEL_4A  = 4,  /**< MPEG4 Simple Profile Level 4a*/
 
-  IMPEG4ENC_SP_LEVEL_5   = 5,    /**< MPEG4 Simple Profile Level 5 */
+    IMPEG4ENC_SP_LEVEL_5   = 5,  /**< MPEG4 Simple Profile Level 5 */
 
-  IMPEG4ENC_SP_LEVEL_6   = 6     /**< MPEG4 Simple Profile Level 6 */
+    IMPEG4ENC_SP_LEVEL_6   = 6   /**< MPEG4 Simple Profile Level 6 */
 
 } IMPEG4ENC_Level;
 
@@ -237,21 +269,21 @@ typedef enum {
  *******************************************************************************
 */
 typedef enum {
-  IMPEG4ENC_H263_LEVEL_10 = 10,     /**< H263 Baseline Profile Level 10 */
+    IMPEG4ENC_H263_LEVEL_10 = 10,   /**< H263 Baseline Profile Level 10 */
 
-  IMPEG4ENC_H263_LEVEL_20 = 20,     /**< H263 Baseline Profile Level 20 */
+    IMPEG4ENC_H263_LEVEL_20 = 20,   /**< H263 Baseline Profile Level 20 */
 
-  IMPEG4ENC_H263_LEVEL_30 = 30,     /**< H263 Baseline Profile Level 30 */
+    IMPEG4ENC_H263_LEVEL_30 = 30,   /**< H263 Baseline Profile Level 30 */
 
-  IMPEG4ENC_H263_LEVEL_40 = 40,     /**< H263 Baseline Profile Level 40 */
+    IMPEG4ENC_H263_LEVEL_40 = 40,   /**< H263 Baseline Profile Level 40 */
 
-  IMPEG4ENC_H263_LEVEL_45 = 45,     /**< H263 Baseline Profile Level 45 */
+    IMPEG4ENC_H263_LEVEL_45 = 45,   /**< H263 Baseline Profile Level 45 */
 
-  IMPEG4ENC_H263_LEVEL_50 = 50,     /**< H263 Baseline Profile Level 50 */
+    IMPEG4ENC_H263_LEVEL_50 = 50,   /**< H263 Baseline Profile Level 50 */
 
-  IMPEG4ENC_H263_LEVEL_60 = 60,     /**< H263 Baseline Profile Level 60 */
+    IMPEG4ENC_H263_LEVEL_60 = 60,   /**< H263 Baseline Profile Level 60 */
 
-  IMPEG4ENC_H263_LEVEL_70 = 70      /**< H263 Baseline Profile Level 70 */
+    IMPEG4ENC_H263_LEVEL_70 = 70    /**< H263 Baseline Profile Level 70 */
 } IMPEG4ENC_H263Level;
 
 /**
@@ -264,19 +296,18 @@ typedef enum {
  *******************************************************************************
 */
 
-typedef enum 
-{   
-  /**
-   * Y varies from 16 to 235 and Cb/Cr varies from 16 to 240
-   */
-  IMPEG4ENC_PR_16_235  = 0,
+typedef enum {
+    /**
+     * Y varies from 16 to 235 and Cb/Cr varies from 16 to 240
+     */
+    IMPEG4ENC_PR_16_235  = 0,
 
-  /**
-   * Y/Cb/Cr varies from 0 to 255
-   */
-  IMPEG4ENC_PR_0_255   = 1,
-  
-  IMPEG4ENC_PR_DEFAULT = IMPEG4ENC_PR_0_255
+    /**
+     * Y/Cb/Cr varies from 0 to 255
+     */
+    IMPEG4ENC_PR_0_255   = 1,
+
+    IMPEG4ENC_PR_DEFAULT = IMPEG4ENC_PR_0_255
 
 } IMPEG4ENC_PixelRange;
 
@@ -291,19 +322,18 @@ typedef enum
  *******************************************************************************
 */
 
-typedef enum 
-{   
-  /**
-   * Disables the scene change detection algorithm
-   */
-  IMPEG4ENC_SCDA_DISABLE  = 0,
+typedef enum {
+    /**
+     * Disables the scene change detection algorithm
+     */
+    IMPEG4ENC_SCDA_DISABLE  = 0,
 
-  /**
-   * Enables the scene change detection algorithm
-   */
-  IMPEG4ENC_SCDA_ENABLE   = 1,
-  
-  IMPEG4ENC_SCDA_DEFAULT = IMPEG4ENC_SCDA_ENABLE
+    /**
+     * Enables the scene change detection algorithm
+     */
+    IMPEG4ENC_SCDA_ENABLE   = 1,
+
+    IMPEG4ENC_SCDA_DEFAULT = IMPEG4ENC_SCDA_ENABLE
 
 } IMPEG4ENC_SceneChangeAlgo;
 
@@ -317,21 +347,20 @@ typedef enum
  *
  *******************************************************************************
 */
-typedef enum
-{
-  IMPEG4_RATECONTROLPARAMS_DEFAULT     = 0,/**< Default RC params */
+typedef enum {
+    IMPEG4_RATECONTROLPARAMS_DEFAULT     = 0, /**< Default RC params */
 
-  IMPEG4_RATECONTROLPARAMS_USERDEFINED = 1,/**< User defined RC params*/
+    IMPEG4_RATECONTROLPARAMS_USERDEFINED = 1, /**< User defined RC params*/
 
-  /**
-   * Keep the Rate Control params as existing.
-   * This is useful because during control call if user don't want to chnage
-   * the Rate Control Params
-   */
-  IMPEG4_RATECONTROLPARAMS_EXISTING    = 2,
-    
+    /**
+     * Keep the Rate Control params as existing.
+     * This is useful because during control call if user don't want to chnage
+     * the Rate Control Params
+     */
+    IMPEG4_RATECONTROLPARAMS_EXISTING    = 2,
 
-  IMPEG4_RATECONTROLPARAMS_MAX
+
+    IMPEG4_RATECONTROLPARAMS_MAX
 
 } IMPEG4ENC_RateControlParamsPreset;
 
@@ -345,24 +374,23 @@ typedef enum
  *
  *******************************************************************************
 */
-typedef enum
-{
-  /**
-   * Fixed QP
-   */
-  IMPEG4_RATECONTROLALGO_NONE        = 0,
+typedef enum {
+    /**
+     * Fixed QP
+     */
+    IMPEG4_RATECONTROLALGO_NONE        = 0,
 
-  /**
-   * VBR Rate Control Algorithm
-   */
-  IMPEG4_RATECONTROLALGO_VBR         = 1,
+    /**
+     * VBR Rate Control Algorithm
+     */
+    IMPEG4_RATECONTROLALGO_VBR         = 1,
 
-  /**
-   * CBR Rate Control Algorithm -- Low Delay
-   */
-  IMPEG4_RATECONTROLALGO_CBR         = 2,
+    /**
+     * CBR Rate Control Algorithm -- Low Delay
+     */
+    IMPEG4_RATECONTROLALGO_CBR         = 2,
 
-  IMPEG4_RATECONTROLALGO_MAX
+    IMPEG4_RATECONTROLALGO_MAX
 
 } IMPEG4ENC_RateControlAlgoPreset;
 
@@ -376,27 +404,26 @@ typedef enum
  *
  *******************************************************************************
 */
-typedef enum
-{
-  
+typedef enum {
+
     /**
      * Default Inter coding params
     */
 
-  IMPEG4_INTERCODING_DEFAULT     = 0,
+    IMPEG4_INTERCODING_DEFAULT     = 0,
 
     /**
      * User defined inter coding params
     */
-  IMPEG4_INTERCODING_USERDEFINED = 1,
-  
-  
+    IMPEG4_INTERCODING_USERDEFINED = 1,
+
+
     /**
      * Keep the inter coding params as existing
     */
-  IMPEG4_INTERCODING_EXISTING    = 2,
-  
-  IMPEG4_INTERCODING_MAX
+    IMPEG4_INTERCODING_EXISTING    = 2,
+
+    IMPEG4_INTERCODING_MAX
 
 } IMPEG4ENC_InterCodingPreset;
 
@@ -410,24 +437,23 @@ typedef enum
  *
  *******************************************************************************
 */
-typedef enum
-{
-   /**
-    * 16x16 Block size
-    */
-  IMPEG4_BLOCKSIZE_16x16     = 0,
+typedef enum {
+    /**
+     * 16x16 Block size
+     */
+    IMPEG4_BLOCKSIZE_16x16     = 0,
 
-   /**
-    * 8x8 Block size
-    */
-  IMPEG4_BLOCKSIZE_8x8       = 1,
+    /**
+     * 8x8 Block size
+     */
+    IMPEG4_BLOCKSIZE_8x8       = 1,
 
-  /**
-    * Default block size
-    */
-  IMPEG4_BLOCKSIZE_DEFAULT   = IMPEG4_BLOCKSIZE_8x8,
+    /**
+      * Default block size
+      */
+    IMPEG4_BLOCKSIZE_DEFAULT   = IMPEG4_BLOCKSIZE_8x8,
 
-  IMPEG4_BLOCKSIZE_MAX       = 2
+    IMPEG4_BLOCKSIZE_MAX       = 2
 
 } IMPEG4ENC_InterBlockSize;
 
@@ -441,38 +467,37 @@ typedef enum
  *
  *******************************************************************************
 */
-typedef enum
-{
-  
+typedef enum {
+
     /**
      * Doesn't insert forcefully any intra macro blocks
     */
-  IMPEG4_INTRAREFRESH_NONE       = 0,
-   /**
-     * Inserts intra macro blocks in a cyclic fashion
-     * cyclic interval is equal to intraRefreshRate
-    */
-  IMPEG4_INTRAREFRESH_CYCLIC_MBS,
-  
+    IMPEG4_INTRAREFRESH_NONE       = 0,
+    /**
+      * Inserts intra macro blocks in a cyclic fashion
+      * cyclic interval is equal to intraRefreshRate
+     */
+    IMPEG4_INTRAREFRESH_CYCLIC_MBS,
+
     /**
      * Inserts Intra Rows in a cyclic fashion
      * Number of Rows equal to intraRefreshRate
     */
-  IMPEG4_INTRAREFRESH_CYCLIC_ROWS,
-  
+    IMPEG4_INTRAREFRESH_CYCLIC_ROWS,
+
     /**
      *  Mandatory Intra Refresh -- evenly distributes number of INTRA MBs over
      *  frames.
     */
-  IMPEG4_INTRAREFRESH_MANDATORY,
-  
-  /**
-   * position of intra macro blocks is intelligently chosen by encoder, but the
-   * number of forcely coded intra macro blocks in a frame is gaurnteed to be
-   * equal to totalMbsInFrame/intraRefreshRate.
-   * This method is not implemented currently.
-   */
-  IMPEG4_INTRAREFRESH_RDOPT_MBS
+    IMPEG4_INTRAREFRESH_MANDATORY,
+
+    /**
+     * position of intra macro blocks is intelligently chosen by encoder, but the
+     * number of forcely coded intra macro blocks in a frame is gaurnteed to be
+     * equal to totalMbsInFrame/intraRefreshRate.
+     * This method is not implemented currently.
+     */
+    IMPEG4_INTRAREFRESH_RDOPT_MBS
 
 } IMPEG4ENC_IntraRefreshMethods;
 
@@ -486,18 +511,17 @@ typedef enum
  *
  *******************************************************************************
 */
-typedef enum
-{
-   /**
-    * Default intra coding params
-    */
-  IMPEG4_INTRACODING_DEFAULT     = 0,
-  
-   /**
-    * User defined intra coding params
-    */
-  IMPEG4_INTRACODING_USERDEFINED = 1,
-  IMPEG4_INTRACODING_MAX
+typedef enum {
+    /**
+     * Default intra coding params
+     */
+    IMPEG4_INTRACODING_DEFAULT     = 0,
+
+    /**
+     * User defined intra coding params
+     */
+    IMPEG4_INTRACODING_USERDEFINED = 1,
+    IMPEG4_INTRACODING_MAX
 
 } IMPEG4ENC_IntraCodingPreset;
 
@@ -511,25 +535,24 @@ typedef enum
  *
  *******************************************************************************
 */
-typedef enum
-{
-   /**
-    * Default slice coding params
-    */
-  IMPEG4_SLICECODING_DEFAULT     = 0,
-  
-   /**
-    * User defined slicecoding params
-    */
-  IMPEG4_SLICECODING_USERDEFINED = 1,
-  
-  /**
-   * Keep the slice coding params as existing
-   * This is useful because during control call if user don't want to chnage 
-   * the sliceCodingParams
-   */
-  IMPEG4_SLICECODING_EXISTING    = 2,
-  IMPEG4_SLICECODING_MAX
+typedef enum {
+    /**
+     * Default slice coding params
+     */
+    IMPEG4_SLICECODING_DEFAULT     = 0,
+
+    /**
+     * User defined slicecoding params
+     */
+    IMPEG4_SLICECODING_USERDEFINED = 1,
+
+    /**
+     * Keep the slice coding params as existing
+     * This is useful because during control call if user don't want to chnage
+     * the sliceCodingParams
+     */
+    IMPEG4_SLICECODING_EXISTING    = 2,
+    IMPEG4_SLICECODING_MAX
 
 } IMPEG4ENC_SliceCodingPreset;
 
@@ -543,25 +566,24 @@ typedef enum
  *
  *******************************************************************************
 */
-typedef enum
-{
-  IMPEG4_SLICEMODE_NONE    = 0 ,
+typedef enum {
+    IMPEG4_SLICEMODE_NONE    = 0,
 
-  /**
-   * Default slice coding mode is MB based
-   */
-  IMPEG4_SLICEMODE_DEFAULT = IMPEG4_SLICEMODE_NONE,
-  
-  /**
-   * Slices are controlled based upon number of Macroblocks
-   */
-  IMPEG4_SLICEMODE_MBUNIT  = 1,
-  
-  /**
-   * Slices are controlled based upon number of bits consumed
-   */
-  IMPEG4_SLICEMODE_BITS   = 2,
-  IMPEG4_SLICEMODE_MAX
+    /**
+     * Default slice coding mode is MB based
+     */
+    IMPEG4_SLICEMODE_DEFAULT = IMPEG4_SLICEMODE_NONE,
+
+    /**
+     * Slices are controlled based upon number of Macroblocks
+     */
+    IMPEG4_SLICEMODE_MBUNIT  = 1,
+
+    /**
+     * Slices are controlled based upon number of bits consumed
+     */
+    IMPEG4_SLICEMODE_BITS   = 2,
+    IMPEG4_SLICEMODE_MAX
 
 } IMPEG4ENC_SliceMode;
 
@@ -575,74 +597,71 @@ typedef enum
  *
  *******************************************************************************
 */
-typedef enum
-{
-   /**
-    * Method as suggested by DivX spec.
-    */
-  IMPEG4_PAD_METHOD_DIVX     = 0,
-  
-   /**
-    * Method as suggested by MPEG4 spec.
-    */
-  IMPEG4_PAD_METHOD_MPEG4    = 1 ,
-  
+typedef enum {
+    /**
+     * Method as suggested by DivX spec.
+     */
+    IMPEG4_PAD_METHOD_DIVX     = 0,
+
+    /**
+     * Method as suggested by MPEG4 spec.
+     */
+    IMPEG4_PAD_METHOD_MPEG4    = 1,
+
     /**
      * Default mode is MPEG4 suggested way.
     */
-  IMPEG4_PAD_METHOD_DEFAULT = IMPEG4_PAD_METHOD_MPEG4,
-  IMPEG4_PAD_METHOD_MAX
+    IMPEG4_PAD_METHOD_DEFAULT = IMPEG4_PAD_METHOD_MPEG4,
+    IMPEG4_PAD_METHOD_MAX
 
 } IMPEG4ENC_nonMultiple16RefPadMethod;
 
 
 /**
-  
+
   @enum   IMPEG4ENC_AspectRatioIdc
   @brief  Defines aspect ratio IDs
-  
-*/
-typedef enum
-{
-  IMPEG4ENC_ASPECTRATIO_SQUARE = 1 ,    /**< 1:1 (square) aspect ratio */
-  IMPEG4ENC_ASPECTRATIO_12_11  ,        /**<  12:11  aspect ratio      */
-  IMPEG4ENC_ASPECTRATIO_10_11  ,        /**<  10:11  aspect ratio      */
-  IMPEG4ENC_ASPECTRATIO_16_11  ,        /**<  16:11  aspect ratio      */
-  IMPEG4ENC_ASPECTRATIO_40_33  ,        /**<  40:33  aspect ratio      */
-  IMPEG4ENC_ASPECTRATIO_EXTENDED = 15   /**<  Extended aspect ratio    */
 
-} IMPEG4ENC_AspectRatioIdc ;
+*/
+typedef enum {
+    IMPEG4ENC_ASPECTRATIO_SQUARE = 1,   /**< 1:1 (square) aspect ratio */
+    IMPEG4ENC_ASPECTRATIO_12_11,        /**<  12:11  aspect ratio      */
+    IMPEG4ENC_ASPECTRATIO_10_11,        /**<  10:11  aspect ratio      */
+    IMPEG4ENC_ASPECTRATIO_16_11,        /**<  16:11  aspect ratio      */
+    IMPEG4ENC_ASPECTRATIO_40_33,        /**<  40:33  aspect ratio      */
+    IMPEG4ENC_ASPECTRATIO_EXTENDED = 15 /**<  Extended aspect ratio    */
+
+} IMPEG4ENC_AspectRatioIdc;
 
 /**
  *******************************************************************************
  *  @enum   IMPEG4ENC_InsertGOVHdrBeforeIframe
- *  @brief  These enumerations capture encoding of GOV and VOL for every I-frame 
+ *  @brief  These enumerations capture encoding of GOV and VOL for every I-frame
  *
  *  @remarks
  *
  *******************************************************************************
 */
-typedef enum
-{
-   /**
-    * GOV and VOL are not encoded for every I-frame. Default
-    */
-  IMPEG4_NO_GOV_NO_VOL     = 0,
-  
-   /**
-    * Only GOV is encoded for every I-frame
-    */
-  IMPEG4_ENCODE_GOV_ONLY    = 1 ,
-  
+typedef enum {
+    /**
+     * GOV and VOL are not encoded for every I-frame. Default
+     */
+    IMPEG4_NO_GOV_NO_VOL     = 0,
+
+    /**
+     * Only GOV is encoded for every I-frame
+     */
+    IMPEG4_ENCODE_GOV_ONLY    = 1,
+
     /**
      * Only VOL is encoded for every I-frame
     */
-  IMPEG4_ENCODE_VOL_ONLY    = 2 ,
+    IMPEG4_ENCODE_VOL_ONLY    = 2,
 
     /**
      * Both GOV and VOL are encoded for every I-frame
-    */  
-  IMPEG4_ENCODE_VOL_AND_GOV     = 3 
+    */
+    IMPEG4_ENCODE_VOL_AND_GOV     = 3
 
 } IMPEG4ENC_InsertGOVHdrBeforeIframe;
 /**
@@ -686,8 +705,8 @@ typedef IVIDENC2_Cmd IMPEG4ENC_Cmd;
  *
  *******************************************************************************
 */
-typedef struct IMPEG4ENC_Obj{
-  struct IMPEG4ENC_Fxns *fxns;
+typedef struct IMPEG4ENC_Obj {
+    struct IMPEG4ENC_Fxns *fxns;
 } IMPEG4ENC_Obj;
 
 
@@ -760,33 +779,33 @@ typedef struct IMPEG4ENC_Obj *IMPEG4ENC_Handle;
  *          1 for enabling late frame skip
  *          0 for disabling frame skip
  *  @param  initialBufferLevel :
- *          Initial buffer level for VBV compliance. It informs that 
- *          hypothetical decoder can start depending on the fullness of the 
- *          VBV buffer. Default value is 0, where codec will internally 
+ *          Initial buffer level for VBV compliance. It informs that
+ *          hypothetical decoder can start depending on the fullness of the
+ *          VBV buffer. Default value is 0, where codec will internally
  *          calculate the value based on the RC algo type
  *  @param  vbvBufferSize :
- *          Virtual Buffer Verifier buffer size. This size controls the frame 
- *          skip logic of the encoder. For low delay applications this size 
+ *          Virtual Buffer Verifier buffer size. This size controls the frame
+ *          skip logic of the encoder. For low delay applications this size
  *          should be small. This size is in bits.
- *          Default value is 0, where codec will internally calculate the 
+ *          Default value is 0, where codec will internally calculate the
  *          value based on the RC algo type.
  *
  *******************************************************************************
 */
 typedef struct IMPEG4ENC_RateControlParams {
-  XDAS_Int32 rateControlParamsPreset;
-  XDAS_Int32 rcAlgo;
-  XDAS_Int32 qpI;
-  XDAS_Int32 qpP;
-  XDAS_Int32 seIntialQP;
-  XDAS_Int32 qpMax;
-  XDAS_Int32 qpMin;
-  XDAS_Int32 enablePerceptualQuantMode;
-  XDAS_Int32 allowFrameSkip;
-  XDAS_Int32 initialBufferLevel;
-  XDAS_Int32 vbvBufferSize;
-  XDAS_Int32 qpMinIntra;
-} IMPEG4ENC_RateControlParams ;
+    XDAS_Int32 rateControlParamsPreset;
+    XDAS_Int32 rcAlgo;
+    XDAS_Int32 qpI;
+    XDAS_Int32 qpP;
+    XDAS_Int32 seIntialQP;
+    XDAS_Int32 qpMax;
+    XDAS_Int32 qpMin;
+    XDAS_Int32 enablePerceptualQuantMode;
+    XDAS_Int32 allowFrameSkip;
+    XDAS_Int32 initialBufferLevel;
+    XDAS_Int32 vbvBufferSize;
+    XDAS_Int32 qpMinIntra;
+} IMPEG4ENC_RateControlParams;
 
 
 /**
@@ -818,7 +837,7 @@ typedef struct IMPEG4ENC_RateControlParams {
  *          selection
  *
  *  @param  enableThresholdingMethod  :
- *          Thresholding cost Method is used by CALC3 suppress expensive 
+ *          Thresholding cost Method is used by CALC3 suppress expensive
  *          coefficients.Thresholding cost Method is used to set a block to be
  *          not_coded if the block has very few small amplitude coeffs.
  *
@@ -839,16 +858,16 @@ typedef struct IMPEG4ENC_RateControlParams {
  *******************************************************************************
 */
 typedef struct IMPEG4ENC_InterCodingParams {
-  XDAS_Int32 interCodingPreset;
-  XDAS_Int32 searchRangeHorP;
-  XDAS_Int32 searchRangeVerP;
-  XDAS_UInt32 globalOffsetME;
-  XDAS_Int32 earlySkipThreshold;
-  XDAS_Int32 enableThresholdingMethod;
-  XDAS_UInt32 minBlockSizeP;
-  XDAS_UInt32 enableRoundingControl;
+    XDAS_Int32  interCodingPreset;
+    XDAS_Int32  searchRangeHorP;
+    XDAS_Int32  searchRangeVerP;
+    XDAS_UInt32 globalOffsetME;
+    XDAS_Int32  earlySkipThreshold;
+    XDAS_Int32  enableThresholdingMethod;
+    XDAS_UInt32 minBlockSizeP;
+    XDAS_UInt32 enableRoundingControl;
 
-} IMPEG4ENC_InterCodingParams ;
+} IMPEG4ENC_InterCodingParams;
 
 
 /**
@@ -870,12 +889,12 @@ typedef struct IMPEG4ENC_InterCodingParams {
  *  @param  intraRefreshRate  :
  *          if intraRefreshMethod is IMPEG4_INTRAREFRESH_CYCLIC_MBS, this value
  *          represents madulo cyclic MBs value. MPEG4 Encoder encodes a
- *          macro block as Intra after every intraRefreshRate number of macro 
- *          blocks.if intraRefreshMethod is IMPEG4_INTRAREFRESH_CYCLIC_ROWS, 
- *          this value represents number if rows which are intra. MPEG4 Encoder 
- *          encodes those many rows as intra every frame and the location of 
+ *          macro block as Intra after every intraRefreshRate number of macro
+ *          blocks.if intraRefreshMethod is IMPEG4_INTRAREFRESH_CYCLIC_ROWS,
+ *          this value represents number if rows which are intra. MPEG4 Encoder
+ *          encodes those many rows as intra every frame and the location of
  *          intra rows moves in cyclic fashion.
- *          This variable is ignored if intraRefreshMethod is 
+ *          This variable is ignored if intraRefreshMethod is
  *          IMPEG4_INTRAREFRESH_NONE.
  *
  *  @param  acpredEnable  :
@@ -890,14 +909,13 @@ typedef struct IMPEG4ENC_InterCodingParams {
  *
  *******************************************************************************
 */
-typedef struct IMPEG4ENC_IntraCodingParams
-{
-  XDAS_Int32  intraCodingPreset;
-  XDAS_UInt32 intraRefreshMethod;
-  XDAS_UInt32 intraRefreshRate;
-  XDAS_UInt32 acpredEnable;
-  XDAS_UInt32 insertGOVHdrBeforeIframe;
-  XDAS_UInt32 enableDriftControl;
+typedef struct IMPEG4ENC_IntraCodingParams {
+    XDAS_Int32  intraCodingPreset;
+    XDAS_UInt32 intraRefreshMethod;
+    XDAS_UInt32 intraRefreshRate;
+    XDAS_UInt32 acpredEnable;
+    XDAS_UInt32 insertGOVHdrBeforeIframe;
+    XDAS_UInt32 enableDriftControl;
 
 } IMPEG4ENC_IntraCodingParams;
 
@@ -923,7 +941,7 @@ typedef struct IMPEG4ENC_IntraCodingParams
  *         sliceMode == IMPEG4_SLICEMODE_MBUNIT then this
  *         parameter informs the number of Macroblocks in one slice
  *         sliceMode == IMPEG4_SLICEMODE_BITS then this
- *         parameter informs the number of bits in one slice in MPEG4 
+ *         parameter informs the number of bits in one slice in MPEG4
  *         jargon resyncIntervalInBits
  *         sliceMode == IMPEG4_SLICEMODE_NONE then this
  *         parameter is not respected
@@ -943,11 +961,11 @@ typedef struct IMPEG4ENC_IntraCodingParams
  *******************************************************************************
 */
 typedef struct IMPEG4ENC_sliceCodingParams {
-  XDAS_Int32  sliceCodingPreset;
-  XDAS_Int32  sliceMode;
-  XDAS_Int32  sliceUnitSize;
-  XDAS_UInt32 gobInterval;
-  XDAS_UInt32 useHec;
+    XDAS_Int32  sliceCodingPreset;
+    XDAS_Int32  sliceMode;
+    XDAS_Int32  sliceUnitSize;
+    XDAS_UInt32 gobInterval;
+    XDAS_UInt32 useHec;
 
 } IMPEG4ENC_sliceCodingParams;
 
@@ -976,11 +994,11 @@ typedef struct IMPEG4ENC_sliceCodingParams {
  *******************************************************************************
 */
 typedef struct IMPEG4ENC_DynamicParams {
-  IVIDENC2_DynamicParams videnc2DynamicParams;
-  IMPEG4ENC_RateControlParams rateControlParams;
-  IMPEG4ENC_InterCodingParams interCodingParams;
-  IMPEG4ENC_sliceCodingParams sliceCodingParams;
-  XDAS_UInt32 aspectRatioIdc;
+    IVIDENC2_DynamicParams      videnc2DynamicParams;
+    IMPEG4ENC_RateControlParams rateControlParams;
+    IMPEG4ENC_InterCodingParams interCodingParams;
+    IMPEG4ENC_sliceCodingParams sliceCodingParams;
+    XDAS_UInt32                 aspectRatioIdc;
 }IMPEG4ENC_DynamicParams;
 
 
@@ -994,7 +1012,7 @@ typedef struct IMPEG4ENC_DynamicParams {
  *
  *******************************************************************************
 */
-extern IMPEG4ENC_DynamicParams MPEG4ENC_TI_DYNAMICPARAMS;
+extern IMPEG4ENC_DynamicParams    MPEG4ENC_TI_DYNAMICPARAMS;
 
 
 /**
@@ -1047,7 +1065,7 @@ extern IMPEG4ENC_DynamicParams MPEG4ENC_TI_DYNAMICPARAMS;
  *
  *  @param  nonMultiple16RefPadMethod  :
  *          Controls the way the padding is done for Ref Frame when Height is
- *          non-multiple of  16. 
+ *          non-multiple of  16.
  *          Follows the enum IMPEG4ENC_nonMultiple16RefPadMethod
  *          IMPEG4_PAD_METHOD_DIVX  - VLC, DIVx way of padding
  *          IMPEG4_PAD_METHOD_MPEG4 - MPEG4 Standard specific way of padding
@@ -1055,43 +1073,43 @@ extern IMPEG4ENC_DynamicParams MPEG4ENC_TI_DYNAMICPARAMS;
  *
  * @param pixelRange :video_range=0 :Y from 16 to 235, Cb and Cr from 16 to 240;
  *                    video_range=1 : Y from 0 to 255,Cb and Cr from 0 to 255.
- * 
- * @param enableSceneChangeAlgo : Parameter to enable or disable scene change 
- *                                algorithm.     
+ *
+ * @param enableSceneChangeAlgo : Parameter to enable or disable scene change
+ *                                algorithm.
  * @param useVOS                : VOS header insertion, 0 = off, 1 = on
  * @param enableMONA            : enable MONA settings  0 = off, 1 = on
- * @param enableAnalyticinfo    : enable MV and SAD access to user 
+ * @param enableAnalyticinfo    : enable MV and SAD access to user
  *                                0 = off, 1 = on
- * 
- * @param debugTraceLevel       : Indicates level of debug trace info to be 
+ *
+ * @param debugTraceLevel       : Indicates level of debug trace info to be
  *                                dumped.
  *                                Disabled if this value is zero.
- * 
- * @param lastNFramesToLog      : Indicates no. of frames for which debug trace 
- *                              info to be dumped. Valid only if debugTraceLevel 
- *                   is non zero.                                         
+ *
+ * @param lastNFramesToLog      : Indicates no. of frames for which debug trace
+ *                              info to be dumped. Valid only if debugTraceLevel
+ *                   is non zero.
  *******************************************************************************
 */
 typedef struct IMPEG4ENC_Params {
-  IVIDENC2_Params videnc2Params;
-  IMPEG4ENC_RateControlParams rateControlParams;
-  IMPEG4ENC_InterCodingParams interCodingParams;
-  IMPEG4ENC_IntraCodingParams intraCodingParams;
-  IMPEG4ENC_sliceCodingParams sliceCodingParams;
+    IVIDENC2_Params             videnc2Params;
+    IMPEG4ENC_RateControlParams rateControlParams;
+    IMPEG4ENC_InterCodingParams interCodingParams;
+    IMPEG4ENC_IntraCodingParams intraCodingParams;
+    IMPEG4ENC_sliceCodingParams sliceCodingParams;
 
-  XDAS_UInt32 useDataPartitioning;
-  XDAS_UInt32 useRvlc;
-  XDAS_UInt32 useShortVideoHeader;
-  XDAS_UInt32 vopTimeIncrementResolution;
-  XDAS_UInt32 nonMultiple16RefPadMethod;
-  XDAS_UInt32 pixelRange;
-  XDAS_UInt32 enableSceneChangeAlgo;
-  XDAS_UInt32 useVOS;
-  XDAS_UInt32 enableMONA;
-  XDAS_Int32  enableAnalyticinfo;
+    XDAS_UInt32 useDataPartitioning;
+    XDAS_UInt32 useRvlc;
+    XDAS_UInt32 useShortVideoHeader;
+    XDAS_UInt32 vopTimeIncrementResolution;
+    XDAS_UInt32 nonMultiple16RefPadMethod;
+    XDAS_UInt32 pixelRange;
+    XDAS_UInt32 enableSceneChangeAlgo;
+    XDAS_UInt32 useVOS;
+    XDAS_UInt32 enableMONA;
+    XDAS_Int32  enableAnalyticinfo;
 
-  XDAS_UInt32 debugTraceLevel;
-  XDAS_UInt32 lastNFramesToLog;
+    XDAS_UInt32 debugTraceLevel;
+    XDAS_UInt32 lastNFramesToLog;
 
 } IMPEG4ENC_Params;
 
@@ -1106,7 +1124,7 @@ typedef struct IMPEG4ENC_Params {
  *
  *******************************************************************************
 */
-extern IMPEG4ENC_Params MPEG4ENC_TI_PARAMS;
+extern IMPEG4ENC_Params    MPEG4ENC_TI_PARAMS;
 
 
 /**
@@ -1145,63 +1163,62 @@ extern IMPEG4ENC_Params MPEG4ENC_TI_PARAMS;
  *          short video header / h263 base line profile
  *          0 for Disable
  *          1 for Enable
- *  @param  vopTimeIncrementResolution  :Resolution of vop_time_increment 
+ *  @param  vopTimeIncrementResolution  :Resolution of vop_time_increment
  *                                       bit-stream syntax element,
  *                                       number of ticks/sec.
- *          
- *  @param  nonMultiple16RefPadMethod  : Controls the way the padding is done 
- *                                       for Ref Frame when Height is 
+ *
+ *  @param  nonMultiple16RefPadMethod  : Controls the way the padding is done
+ *                                       for Ref Frame when Height is
  *                                       Non-multiple of 16.
  *  @param  pixelRange  : Pixel range to be put in header
  *                        See IMPEG4VENC_PixelRange enumeration for details.
- * 
+ *
  *  @param  enableSceneChangeAlgo  :
  *          Scene change detection algorithm.
  *          0 for Disable
  *          1 for Enable
  * @param   useVOS                : VOS header insertion, 0 = off, 1 = on
  * @param   enableMONA            : enable MONA settings  0 = off, 1 = on
- * @param   enableAnalyticinfo    : enable MV and SAD access to user 
+ * @param   enableAnalyticinfo    : enable MV and SAD access to user
  *                                  0 = off, 1 = on
- * 
- * @param   debugTraceLevel        : 
+ *
+ * @param   debugTraceLevel        :
  *          0 Disable dumping debug data
  *           1-4 enable dumping debug data
- * 
+ *
  * @param lastNFramesToLog : No. of frame for which debug trace info to be
  *                           dumped.
- * 
+ *
  * @param   extMemoryDebugTraceAddr : External memory address where debug trace
  *                                    info is dunped
- * 
- * @param   extMemoryDebugTraceSize : Size of the debug trace info in the  
+ *
+ * @param   extMemoryDebugTraceSize : Size of the debug trace info in the
  *                                    external memory.
- * 
+ *
  *******************************************************************************
 */
-typedef struct
-{
-  IVIDENC2_Status videnc2Status;
-  IMPEG4ENC_RateControlParams rateControlParams;
-  IMPEG4ENC_InterCodingParams interCodingParams;
-  IMPEG4ENC_IntraCodingParams intraCodingParams;
-  IMPEG4ENC_sliceCodingParams sliceCodingParams;
+typedef struct {
+    IVIDENC2_Status             videnc2Status;
+    IMPEG4ENC_RateControlParams rateControlParams;
+    IMPEG4ENC_InterCodingParams interCodingParams;
+    IMPEG4ENC_IntraCodingParams intraCodingParams;
+    IMPEG4ENC_sliceCodingParams sliceCodingParams;
 
-  XDAS_UInt32 useDataPartitioning;
-  XDAS_UInt32 useRvlc;
-  XDAS_UInt32 useShortVideoHeader;
-  XDAS_UInt32 vopTimeIncrementResolution;
-  XDAS_UInt32 nonMultiple16RefPadMethod;
-  XDAS_UInt32 pixelRange;
-  XDAS_UInt32 enableSceneChangeAlgo;
-  XDAS_UInt32 useVOS;
-  XDAS_UInt32 enableMONA;
-  XDAS_Int32  enableAnalyticinfo;
+    XDAS_UInt32 useDataPartitioning;
+    XDAS_UInt32 useRvlc;
+    XDAS_UInt32 useShortVideoHeader;
+    XDAS_UInt32 vopTimeIncrementResolution;
+    XDAS_UInt32 nonMultiple16RefPadMethod;
+    XDAS_UInt32 pixelRange;
+    XDAS_UInt32 enableSceneChangeAlgo;
+    XDAS_UInt32 useVOS;
+    XDAS_UInt32 enableMONA;
+    XDAS_Int32  enableAnalyticinfo;
 
-  XDAS_UInt32 debugTraceLevel;
-  XDAS_UInt32 lastNFramesToLog;
-  XDAS_UInt32 *extMemoryDebugTraceAddr;
-  XDAS_UInt32 extMemoryDebugTraceSize;
+    XDAS_UInt32  debugTraceLevel;
+    XDAS_UInt32  lastNFramesToLog;
+    XDAS_UInt32 *extMemoryDebugTraceAddr;
+    XDAS_UInt32  extMemoryDebugTraceSize;
 
 } IMPEG4ENC_Status;
 
@@ -1219,7 +1236,7 @@ typedef struct
  *******************************************************************************
 */
 typedef struct IMPEG4ENC_InArgs {
-  IVIDENC2_InArgs  videnc2InArgs;
+    IVIDENC2_InArgs videnc2InArgs;
 } IMPEG4ENC_InArgs;
 
 
@@ -1236,7 +1253,7 @@ typedef struct IMPEG4ENC_InArgs {
  *******************************************************************************
 */
 typedef struct IMPEG4ENC_OutArgs {
-  IVIDENC2_OutArgs videnc2OutArgs;
+    IVIDENC2_OutArgs videnc2OutArgs;
 } IMPEG4ENC_OutArgs;
 
 
@@ -1251,7 +1268,7 @@ typedef struct IMPEG4ENC_OutArgs {
  *******************************************************************************
 */
 typedef struct IMPEG4ENC_Fxns {
-  IVIDENC2_Fxns ividenc;  /* IMPEG4ENC extends IVIDENC */
+    IVIDENC2_Fxns ividenc; /* IMPEG4ENC extends IVIDENC */
 } IMPEG4ENC_Fxns;
 
 /**
@@ -1273,11 +1290,11 @@ typedef struct IMPEG4ENC_Fxns {
  ******************************************************************************
 */
 typedef struct IMPEG4ENC_DataSyncDesc {
-  XDM_DataSyncDesc dataSyncDesc;
-  XDAS_UInt16 *mbAddr;    
-  XDAS_UInt16 *gobNumber; 
-  XDAS_UInt16 *quantScale;
-  XDAS_UInt32 *mv;        
+    XDM_DataSyncDesc dataSyncDesc;
+    XDAS_UInt16     *mbAddr;
+    XDAS_UInt16     *gobNumber;
+    XDAS_UInt16     *quantScale;
+    XDAS_UInt32     *mv;
 } IMPEG4ENC_DataSyncDesc;
 
 #ifdef __cplusplus
@@ -1287,3 +1304,4 @@ typedef struct IMPEG4ENC_DataSyncDesc {
 /*@}*/ /* ingroup HDVICP2MPEG4 */
 
 #endif /* IMPEG4ENC_ */
+

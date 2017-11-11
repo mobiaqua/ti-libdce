@@ -1,4 +1,36 @@
 /*
+ * Copyright (c) 2010, Texas Instruments Incorporated
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ *
+ * *  Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ *
+ * *  Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * *  Neither the name of Texas Instruments Incorporated nor the names of
+ *    its contributors may be used to endorse or promote products derived
+ *    from this software without specific prior written permission.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+ * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
+ * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+ * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
+ * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
+ * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
+ * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
+ * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
+/*
 ********************************************************************************
 * HDVICP2.0 Based JPEG Decoder
 *
@@ -87,11 +119,10 @@
 *
 *******************************************************************************
 */
-typedef enum
-{
-  IJPEGVDEC_THUMBNAIL_JFIF = 1,
-  IJPEGVDEC_THUMBNAIL_EXIF = 2,
-  IJPEGVDEC_THUMBNAIL_DOWNSAMPLE = 3
+typedef enum {
+    IJPEGVDEC_THUMBNAIL_JFIF = 1,
+    IJPEGVDEC_THUMBNAIL_EXIF = 2,
+    IJPEGVDEC_THUMBNAIL_DOWNSAMPLE = 3
 }ethumbnailMode;
 
 /**
@@ -112,9 +143,9 @@ typedef enum
 *******************************************************************************
 */
 typedef enum {
-  IJPEGVDEC_NODOWNSAMPLE  = 1,
-  IJPEGVDEC_DOWNSAMPLEBY2 = 2,
-  IJPEGVDEC_DOWNSAMPLEBY4 = 4
+    IJPEGVDEC_NODOWNSAMPLE  = 1,
+    IJPEGVDEC_DOWNSAMPLEBY2 = 2,
+    IJPEGVDEC_DOWNSAMPLEBY4 = 4
 } edownSamplingFactor;
 
 /**
@@ -131,10 +162,9 @@ typedef enum {
 *
 *******************************************************************************
 */
-typedef enum
-{
-  IJPEGVDEC_EC_DISABLE = 0,
-  IJPEGVDEC_EC_ENABLE
+typedef enum {
+    IJPEGVDEC_EC_DISABLE = 0,
+    IJPEGVDEC_EC_ENABLE
 }eFrameErrorConcealment;
 
 /**
@@ -148,9 +178,8 @@ typedef enum
 *
 *******************************************************************************
 */
-typedef struct
-{
-  IVIDDEC3_Fxns    ividdec;
+typedef struct {
+    IVIDDEC3_Fxns ividdec;
 } IJPEGVDEC_Fxns;
 
 /**
@@ -165,9 +194,8 @@ typedef struct
 *
 *******************************************************************************
 */
-typedef struct
-{
-  IJPEGVDEC_Fxns *fxns;
+typedef struct {
+    IJPEGVDEC_Fxns *fxns;
 } IJPEGVDEC_Obj;
 
 /**
@@ -209,52 +237,51 @@ typedef IJPEGVDEC_Obj *IJPEGVDEC_Handle;
 *
 *******************************************************************************
 */
-typedef struct
-{
-  /*--------------------------------------------------------------------------*/
-  /*Base Class                                                                */
-  /*--------------------------------------------------------------------------*/
-  IVIDDEC3_Status  viddecStatus;
+typedef struct {
+    /*--------------------------------------------------------------------------*/
+    /*Base Class                                                                */
+    /*--------------------------------------------------------------------------*/
+    IVIDDEC3_Status viddecStatus;
 
-  /*--------------------------------------------------------------------------*/
-  /*Extended Error Code0 returned by decoder                                  */
-  /*--------------------------------------------------------------------------*/
-  XDAS_UInt32 extendedErrorCode0;
+    /*--------------------------------------------------------------------------*/
+    /*Extended Error Code0 returned by decoder                                  */
+    /*--------------------------------------------------------------------------*/
+    XDAS_UInt32 extendedErrorCode0;
 
-  /*--------------------------------------------------------------------------*/
-  /*Extended Error Code1 returned by decoder                                  */
-  /*--------------------------------------------------------------------------*/
-  XDAS_UInt32 extendedErrorCode1;
+    /*--------------------------------------------------------------------------*/
+    /*Extended Error Code1 returned by decoder                                  */
+    /*--------------------------------------------------------------------------*/
+    XDAS_UInt32 extendedErrorCode1;
 
-  /*--------------------------------------------------------------------------*/
-  /*Extended Error Code2 returned by decoder                                  */
-  /*--------------------------------------------------------------------------*/
-  XDAS_UInt32 extendedErrorCode2;
+    /*--------------------------------------------------------------------------*/
+    /*Extended Error Code2 returned by decoder                                  */
+    /*--------------------------------------------------------------------------*/
+    XDAS_UInt32 extendedErrorCode2;
 
-  /*--------------------------------------------------------------------------*/
-  /*Extended Error Code3 returned by decoder                                  */
-  /*--------------------------------------------------------------------------*/
-  XDAS_UInt32 extendedErrorCode3;
+    /*--------------------------------------------------------------------------*/
+    /*Extended Error Code3 returned by decoder                                  */
+    /*--------------------------------------------------------------------------*/
+    XDAS_UInt32 extendedErrorCode3;
 
-  /*--------------------------------------------------------------------------*/
-  /*DebugTrace level being used by decoder                                    */
-  /*--------------------------------------------------------------------------*/
-  XDAS_UInt32 debugTraceLevel;
+    /*--------------------------------------------------------------------------*/
+    /*DebugTrace level being used by decoder                                    */
+    /*--------------------------------------------------------------------------*/
+    XDAS_UInt32 debugTraceLevel;
 
-  /*--------------------------------------------------------------------------*/
-  /*Number of frames of debug data decoder is dumping trace buffer            */
-  /*--------------------------------------------------------------------------*/
-  XDAS_UInt32 lastNFramesToLog;
+    /*--------------------------------------------------------------------------*/
+    /*Number of frames of debug data decoder is dumping trace buffer            */
+    /*--------------------------------------------------------------------------*/
+    XDAS_UInt32 lastNFramesToLog;
 
-  /*--------------------------------------------------------------------------*/
-  /* Trace buffer base address in external memory                             */
-  /*--------------------------------------------------------------------------*/
-  XDAS_UInt32 * extMemoryDebugTraceAddr;
+    /*--------------------------------------------------------------------------*/
+    /* Trace buffer base address in external memory                             */
+    /*--------------------------------------------------------------------------*/
+    XDAS_UInt32 *extMemoryDebugTraceAddr;
 
-  /*--------------------------------------------------------------------------*/
-  /* Size of Trace buffer in external memory                                  */
-  /*--------------------------------------------------------------------------*/
-  XDAS_UInt32 extMemoryDebugTraceSize;
+    /*--------------------------------------------------------------------------*/
+    /* Size of Trace buffer in external memory                                  */
+    /*--------------------------------------------------------------------------*/
+    XDAS_UInt32 extMemoryDebugTraceSize;
 
 } IJPEGVDEC_Status;
 
@@ -294,54 +321,53 @@ typedef IVIDDEC3_Cmd IJPEGVDEC_Cmd;
 *
 *******************************************************************************
 */
-typedef struct
-{
-  /*--------------------------------------------------------------------------*/
-  /*Base Class                                                                */
-  /*--------------------------------------------------------------------------*/
-  IVIDDEC3_Params    viddecParams;
+typedef struct {
+    /*--------------------------------------------------------------------------*/
+    /*Base Class                                                                */
+    /*--------------------------------------------------------------------------*/
+    IVIDDEC3_Params viddecParams;
 
-  /*--------------------------------------------------------------------------*/
-  /*Enable/Disable Error Concealment                                          */
-  /* enumeration 'eFrameErrorConcealment' can be used to set this value       */
-  /*--------------------------------------------------------------------------*/
-  XDAS_Int32         ErrorConcealmentON;
+    /*--------------------------------------------------------------------------*/
+    /*Enable/Disable Error Concealment                                          */
+    /* enumeration 'eFrameErrorConcealment' can be used to set this value       */
+    /*--------------------------------------------------------------------------*/
+    XDAS_Int32 ErrorConcealmentON;
 
-  /*--------------------------------------------------------------------------*/
-  /*Debug trace Level                                                         */
-  /*--------------------------------------------------------------------------*/
-  XDAS_UInt32   debugTraceLevel;
+    /*--------------------------------------------------------------------------*/
+    /*Debug trace Level                                                         */
+    /*--------------------------------------------------------------------------*/
+    XDAS_UInt32 debugTraceLevel;
 
-  /*--------------------------------------------------------------------------*/
-  /*Number of frames to log history for debugTrace                            */
-  /*--------------------------------------------------------------------------*/
-  XDAS_UInt32   lastNFramesToLog;
+    /*--------------------------------------------------------------------------*/
+    /*Number of frames to log history for debugTrace                            */
+    /*--------------------------------------------------------------------------*/
+    XDAS_UInt32 lastNFramesToLog;
 
-  /*--------------------------------------------------------------------------*/
-  /* ENABLE/DISABLE Slice Switching  feature.                                 */
-  /* enumeration 'eSliceSwitch' can be used to set this value                 */
-  /*--------------------------------------------------------------------------*/
-  XDAS_UInt32   sliceSwitchON;
+    /*--------------------------------------------------------------------------*/
+    /* ENABLE/DISABLE Slice Switching  feature.                                 */
+    /* enumeration 'eSliceSwitch' can be used to set this value                 */
+    /*--------------------------------------------------------------------------*/
+    XDAS_UInt32 sliceSwitchON;
 
-  /*--------------------------------------------------------------------------*/
-  /* Number of Switches in a Frame. This is valid only when sliceSwitchON is  */
-  /* enabled , when disabled , its dont care.                                 */
-  /* Application tells how many switches should happen in a frame , codec has */
-  /* to decide how to handle each process call ( how many slices) and it has  */
-  /* process "numSwitchInFrame " process calls only                           */
-  /*--------------------------------------------------------------------------*/
-  XDAS_UInt32   numSwitchPerFrame;
+    /*--------------------------------------------------------------------------*/
+    /* Number of Switches in a Frame. This is valid only when sliceSwitchON is  */
+    /* enabled , when disabled , its dont care.                                 */
+    /* Application tells how many switches should happen in a frame , codec has */
+    /* to decide how to handle each process call ( how many slices) and it has  */
+    /* process "numSwitchInFrame " process calls only                           */
+    /*--------------------------------------------------------------------------*/
+    XDAS_UInt32 numSwitchPerFrame;
 
-  /*--------------------------------------------------------------------------*/
-  /* Application tells a number meaning codec has to decode this much slices  */
-  /* or restart markers and come out of process call. Here each switch can    */
-  /*have N number of restart marker ( N should be greater than or equal to 1).*/
-  /* Once codec process call is done , application will give again the next   */
-  /* number and application will handle till all the slices in the frame have */
-  /* been decoded.                                                            */
-  /* This paramter is valid only when "sliceSwitchON"  is enabled             */
-  /*--------------------------------------------------------------------------*/
-  XDAS_UInt32   numRestartMarkerPerSwitch;
+    /*--------------------------------------------------------------------------*/
+    /* Application tells a number meaning codec has to decode this much slices  */
+    /* or restart markers and come out of process call. Here each switch can    */
+    /*have N number of restart marker ( N should be greater than or equal to 1).*/
+    /* Once codec process call is done , application will give again the next   */
+    /* number and application will handle till all the slices in the frame have */
+    /* been decoded.                                                            */
+    /* This paramter is valid only when "sliceSwitchON"  is enabled             */
+    /*--------------------------------------------------------------------------*/
+    XDAS_UInt32 numRestartMarkerPerSwitch;
 
 } IJPEGVDEC_Params;
 
@@ -384,20 +410,19 @@ typedef struct
 *
 *******************************************************************************
 */
-typedef struct
-{
-  IVIDDEC3_DynamicParams viddecDynamicParams;
+typedef struct {
+    IVIDDEC3_DynamicParams viddecDynamicParams;
 
 
-  XDAS_Int32          decodeThumbnail;
+    XDAS_Int32 decodeThumbnail;
 
-  XDAS_Int32          thumbnailMode;
+    XDAS_Int32 thumbnailMode;
 
-  XDAS_Int32         downsamplingFactor;
+    XDAS_Int32 downsamplingFactor;
 
-  XDAS_Int32         streamingCompliant;
+    XDAS_Int32 streamingCompliant;
 
-  XDAS_Int32          rangeReduction;
+    XDAS_Int32 rangeReduction;
 
 } IJPEGVDEC_DynamicParams;
 
@@ -413,9 +438,8 @@ typedef struct
 *
 *******************************************************************************
 */
-typedef struct
-{
-  IVIDDEC3_InArgs   viddecInArgs;
+typedef struct {
+    IVIDDEC3_InArgs viddecInArgs;
 }IJPEGVDEC_InArgs;
 
 /**
@@ -446,147 +470,144 @@ typedef struct
 *
 *******************************************************************************
 */
-typedef struct
-{
-  IVIDDEC3_OutArgs  viddecOutArgs;
-  XDAS_UInt32 IsGrayFlag;
-  XDAS_UInt32 bytesConsumedForPartialBuffer;
+typedef struct {
+    IVIDDEC3_OutArgs viddecOutArgs;
+    XDAS_UInt32      IsGrayFlag;
+    XDAS_UInt32      bytesConsumedForPartialBuffer;
 }IJPEGVDEC_OutArgs;
 
 
-typedef enum
-{
-  IJPEGDEC_ERR_UNSUPPORTED_VIDDEC3PARAMS = 0,
-  IJPEGDEC_ERR_UNSUPPORTED_VIDDEC3DYNAMICPARAMS = 1,
-  IJPEGDEC_ERR_UNSUPPORTED_JPEGDECDYNAMICPARAMS = 2,
-  IJPEGDEC_ERR_NOSLICE = 3,
-  IJPEGDEC_ERR_MBDATA = 4,
-  IJPEGDEC_ERR_STANDBY = 5,
-  IJPEGDEC_ERR_INVALID_MBOX_MESSAGE = 6,
-  IJPEGDEC_ERR_HDVICP_RESET = 7,
-  IJPEGDEC_ERR_HDVICP_WAIT_NOT_CLEAN_EXIT = 16,
-  IJPEGDEC_ERR_FRAME_HDR = 17,
-  IJPEGDEC_ERR_SCAN_HDR = 18,
-  IJPEGDEC_ERR_HUFF_TBL_HDR = 19,
-  IJPEGDEC_ERR_QUANT_TBL_HDR = 20,
-  IJPEGDEC_ERR_OUTCHROMAFORMAT = 21,
-  IJPEGDEC_ERR_UNSUPPORTED_MARKER = 22,
-  IJPEGDEC_ERR_THUMBNAIL = 23,
-  IJPEGDEC_ERR_IRES_HANDLE = 24,
-  IJPEGDEC_ERR_DYNAMIC_PARAMS_HANDLE = 25,
+typedef enum {
+    IJPEGDEC_ERR_UNSUPPORTED_VIDDEC3PARAMS = 0,
+    IJPEGDEC_ERR_UNSUPPORTED_VIDDEC3DYNAMICPARAMS = 1,
+    IJPEGDEC_ERR_UNSUPPORTED_JPEGDECDYNAMICPARAMS = 2,
+    IJPEGDEC_ERR_NOSLICE = 3,
+    IJPEGDEC_ERR_MBDATA = 4,
+    IJPEGDEC_ERR_STANDBY = 5,
+    IJPEGDEC_ERR_INVALID_MBOX_MESSAGE = 6,
+    IJPEGDEC_ERR_HDVICP_RESET = 7,
+    IJPEGDEC_ERR_HDVICP_WAIT_NOT_CLEAN_EXIT = 16,
+    IJPEGDEC_ERR_FRAME_HDR = 17,
+    IJPEGDEC_ERR_SCAN_HDR = 18,
+    IJPEGDEC_ERR_HUFF_TBL_HDR = 19,
+    IJPEGDEC_ERR_QUANT_TBL_HDR = 20,
+    IJPEGDEC_ERR_OUTCHROMAFORMAT = 21,
+    IJPEGDEC_ERR_UNSUPPORTED_MARKER = 22,
+    IJPEGDEC_ERR_THUMBNAIL = 23,
+    IJPEGDEC_ERR_IRES_HANDLE = 24,
+    IJPEGDEC_ERR_DYNAMIC_PARAMS_HANDLE = 25,
 
-  /* Error Codes of Data Sync */
-  IJPEGDEC_ERR_DATASYNC = 26,
-  IJPEGDEC_ERR_DOWNSAMPLE_INPUT_FORMAT = 27,
-  IJPEGDEC_ERR_NOT_SUPPORTED_FEATURE = 28,
-  IJPEGDEC_ERR_NOT_SUPPORTED_RESOLUTION = 29
+    /* Error Codes of Data Sync */
+    IJPEGDEC_ERR_DATASYNC = 26,
+    IJPEGDEC_ERR_DOWNSAMPLE_INPUT_FORMAT = 27,
+    IJPEGDEC_ERR_NOT_SUPPORTED_FEATURE = 28,
+    IJPEGDEC_ERR_NOT_SUPPORTED_RESOLUTION = 29
 
 }IJPEGDEC_ExtendedErrorCodes;
 
-typedef enum
-{
-  JPEG_DECODE_THUMBNAIL_ERROR = 0,
-  JPEG_DYNAMIC_PARAMS_HANDLE_ERROR,
-  JPEG_THUMBNAIL_MODE_ERROR,
-  JPEG_DOWNSAMPLING_FACTOR_ERROR,
-  JPEG_STREAMING_COMPLIANT_ERROR,
-  JPEG_NON_INTERLEAVED_STREAMING_COMPLIANT_ERROR,
-  JPEG_DECODE_HEADER_ERROR,
-  JPEG_DISPLAY_WIDTH_ERROR,
-  JPEG_DYNAMIC_PARAMS_SIZE_ERROR,
-  JPEG_NULL_INSTANCE_HANDLE_ERROR,
-  JPEG_NULL_INARGS_POINTER_ERROR,
-  JPEG_NULL_OUTARGS_POINTER_ERROR,
-  JPEG_NULL_INPUT_BUF_DESC_ERROR,
-  JPEG_NULL_OUTPUT_BUF_DESC_ERROR,
-  JPEG_INVALID_INARGS_SIZE,
-  JPEG_INVALID_OUTARGS_SIZE,
-  JPEG_NULL_INPUT_BUFFER_POINTER_ERROR,
-  JPEG_NULL_OUTPUT_BUF_DESC_POINTER_ERROR,
-  JPEG_INVALID_NUM_OF_INPUT_BUFFERS_ERROR,
-  JPEG_INVALID_INPUT_BYTES_ERROR,
-  JPEG_INVALID_INPUT_BUFFER_MEMORY_TYPE_ERROR,
-  JPEG_INVALID_NUM_OF_OUTPUT_BUFFERS_ERROR,
-  JPEG_NULL_OUTPUT_BUFFER_POINTER0_ERROR,
-  JPEG_INVALID_OUTPUT_BUFFER0_SIZE_ERROR,
-  JPEG_INVALID_OUTPUT_BUFFER0_MEMTYPE_ERROR,
-  JPEG_NULL_OUTPUT_BUFFER_POINTER1_ERROR,
-  JPEG_INVALID_OUTPUT_BUFFER1_SIZE_ERROR,
-  JPEG_INVALID_OUTPUT_BUFFER1_MEMTYPE_ERROR,
-  JPEG_NULL_OUTPUT_BUFFER_POINTER2_ERROR,
-  JPEG_INVALID_OUTPUT_BUFFER2_SIZE_ERROR,
-  JPEG_INVALID_OUTPUT_BUFFER2_MEMTYPE_ERROR,
-  JPEG_INVALID_INPUT_ID_ERROR,
-  JPEG_NUM_VDMA_DESC_EXCEEDS_ERROR,
-  JPEG_INVALID_SOI_MARKER_ERROR,
-  JPEG_INVALID_MARKER_SEG_LENGTH_ERROR,
-  JPEG_NON_STANDARD_MARKER_CODE_ERROR,
-  JPEG_INVALID_QUANT_TABLE_TYPE_ERROR,
-  JPEG_QUANT_TABLE_BYTES_READ_ERROR,
-  JPEG_INVALID_HUFFMAN_TABLE_TYPE_ERROR,
-  JPEG_HUFFMAN_CODE_LENGTH_SIZE_EXCEED_ERROR,
-  JPEG_HUFFMAN_TABLE_MARKER_SEG_SIZE_ERROR,
-  JPEG_HUFFMAN_TABLE_BYTES_READ_ERROR,
-  JPEG_INVALID_SAMPLE_PRECISION_ERROR,
-  JPEG_INVALID_NUM_COMPONENTS_ERROR,
-  JPEG_FRAME_HDR_BYTES_READ_ERROR,
-  JPEG_NOT_SUPPORTED_FORMAT_ERROR,
-  JPEG_ARITHMETIC_DECODING_NOT_SUPPORTED_MARKER_ERROR,
-  JPEG_PROG_DECODING_NOT_SUPPORTED_MARKER_ERROR,
-  JPEG_LOSSLESS_DECODING_NOT_SUPPORTED_MARKER_ERROR,
-  JPEG_DIFFERENTIAL_DECODING_NOT_SUPPORTED_MARKER_ERROR,
-  JPEG_JFIF_THUMBNAIL_IDENTIFIER_ERROR,
-  JPEG_JFIF_THUMBNAIL_BYTES_READ_ERROR,
-  JPEG_JFIF_EXTN_NO_SOI_ERROR,
-  JPEG_JFIF_NOT_SUPPORTED_FEATURE_ERROR,
-  JPEG_FORCECHROMA_OUTPUTCHROMA_FORMAT_MISMATCH_ERROR,
-  JPEG_INVALID_VERT_SCAN_FREQ_ERROR,
-  JPEG_INVALID_HORI_SCAN_FREQ_ERROR,
-  JPEG_INVALID_QUANT_DEST_SELECTOR_ERROR,
-  JPEG_DC_ENTROPY_CODING_DEST_ERROR,
-  JPEG_AC_ENTROPY_CODING_DEST_ERROR,
-  JPEG_ECD_VLD_OUT_OF_TABLE_ERROR,
-  JPEG_ECD_RESTART_INTERVAL_ERROR,
-  JPEG_ECD_BLOCK_COEFF_NUM_ERROR,
-  JPEG_GET_DATA_SYNC_NULL_FUNC_POINTER_ERROR,
-  JPEG_PUT_DATA_SYNC_NULL_FUNC_POINTER_ERROR,
-  JPEG_HDVICP_ACQUIRE_AND_CONFIGURE_ERROR,
-  JPEG_NULL_ALGORITHM_HANDLE_ERROR,
-  JPEG_GETVERSION_NULL_BUF_POINTER_ERROR,
-  JPEG_IRES_RESOURCE_DESC_ERROR,
-  JPEG_IRES_RESOURCE_DESC_HANDLE_ERROR,
-  JPEG_NULL_STATUS_DATA_BUF,
-  JPEG_EXCEED_BYTES_CONSUMED_ERROR,
+typedef enum {
+    JPEG_DECODE_THUMBNAIL_ERROR = 0,
+    JPEG_DYNAMIC_PARAMS_HANDLE_ERROR,
+    JPEG_THUMBNAIL_MODE_ERROR,
+    JPEG_DOWNSAMPLING_FACTOR_ERROR,
+    JPEG_STREAMING_COMPLIANT_ERROR,
+    JPEG_NON_INTERLEAVED_STREAMING_COMPLIANT_ERROR,
+    JPEG_DECODE_HEADER_ERROR,
+    JPEG_DISPLAY_WIDTH_ERROR,
+    JPEG_DYNAMIC_PARAMS_SIZE_ERROR,
+    JPEG_NULL_INSTANCE_HANDLE_ERROR,
+    JPEG_NULL_INARGS_POINTER_ERROR,
+    JPEG_NULL_OUTARGS_POINTER_ERROR,
+    JPEG_NULL_INPUT_BUF_DESC_ERROR,
+    JPEG_NULL_OUTPUT_BUF_DESC_ERROR,
+    JPEG_INVALID_INARGS_SIZE,
+    JPEG_INVALID_OUTARGS_SIZE,
+    JPEG_NULL_INPUT_BUFFER_POINTER_ERROR,
+    JPEG_NULL_OUTPUT_BUF_DESC_POINTER_ERROR,
+    JPEG_INVALID_NUM_OF_INPUT_BUFFERS_ERROR,
+    JPEG_INVALID_INPUT_BYTES_ERROR,
+    JPEG_INVALID_INPUT_BUFFER_MEMORY_TYPE_ERROR,
+    JPEG_INVALID_NUM_OF_OUTPUT_BUFFERS_ERROR,
+    JPEG_NULL_OUTPUT_BUFFER_POINTER0_ERROR,
+    JPEG_INVALID_OUTPUT_BUFFER0_SIZE_ERROR,
+    JPEG_INVALID_OUTPUT_BUFFER0_MEMTYPE_ERROR,
+    JPEG_NULL_OUTPUT_BUFFER_POINTER1_ERROR,
+    JPEG_INVALID_OUTPUT_BUFFER1_SIZE_ERROR,
+    JPEG_INVALID_OUTPUT_BUFFER1_MEMTYPE_ERROR,
+    JPEG_NULL_OUTPUT_BUFFER_POINTER2_ERROR,
+    JPEG_INVALID_OUTPUT_BUFFER2_SIZE_ERROR,
+    JPEG_INVALID_OUTPUT_BUFFER2_MEMTYPE_ERROR,
+    JPEG_INVALID_INPUT_ID_ERROR,
+    JPEG_NUM_VDMA_DESC_EXCEEDS_ERROR,
+    JPEG_INVALID_SOI_MARKER_ERROR,
+    JPEG_INVALID_MARKER_SEG_LENGTH_ERROR,
+    JPEG_NON_STANDARD_MARKER_CODE_ERROR,
+    JPEG_INVALID_QUANT_TABLE_TYPE_ERROR,
+    JPEG_QUANT_TABLE_BYTES_READ_ERROR,
+    JPEG_INVALID_HUFFMAN_TABLE_TYPE_ERROR,
+    JPEG_HUFFMAN_CODE_LENGTH_SIZE_EXCEED_ERROR,
+    JPEG_HUFFMAN_TABLE_MARKER_SEG_SIZE_ERROR,
+    JPEG_HUFFMAN_TABLE_BYTES_READ_ERROR,
+    JPEG_INVALID_SAMPLE_PRECISION_ERROR,
+    JPEG_INVALID_NUM_COMPONENTS_ERROR,
+    JPEG_FRAME_HDR_BYTES_READ_ERROR,
+    JPEG_NOT_SUPPORTED_FORMAT_ERROR,
+    JPEG_ARITHMETIC_DECODING_NOT_SUPPORTED_MARKER_ERROR,
+    JPEG_PROG_DECODING_NOT_SUPPORTED_MARKER_ERROR,
+    JPEG_LOSSLESS_DECODING_NOT_SUPPORTED_MARKER_ERROR,
+    JPEG_DIFFERENTIAL_DECODING_NOT_SUPPORTED_MARKER_ERROR,
+    JPEG_JFIF_THUMBNAIL_IDENTIFIER_ERROR,
+    JPEG_JFIF_THUMBNAIL_BYTES_READ_ERROR,
+    JPEG_JFIF_EXTN_NO_SOI_ERROR,
+    JPEG_JFIF_NOT_SUPPORTED_FEATURE_ERROR,
+    JPEG_FORCECHROMA_OUTPUTCHROMA_FORMAT_MISMATCH_ERROR,
+    JPEG_INVALID_VERT_SCAN_FREQ_ERROR,
+    JPEG_INVALID_HORI_SCAN_FREQ_ERROR,
+    JPEG_INVALID_QUANT_DEST_SELECTOR_ERROR,
+    JPEG_DC_ENTROPY_CODING_DEST_ERROR,
+    JPEG_AC_ENTROPY_CODING_DEST_ERROR,
+    JPEG_ECD_VLD_OUT_OF_TABLE_ERROR,
+    JPEG_ECD_RESTART_INTERVAL_ERROR,
+    JPEG_ECD_BLOCK_COEFF_NUM_ERROR,
+    JPEG_GET_DATA_SYNC_NULL_FUNC_POINTER_ERROR,
+    JPEG_PUT_DATA_SYNC_NULL_FUNC_POINTER_ERROR,
+    JPEG_HDVICP_ACQUIRE_AND_CONFIGURE_ERROR,
+    JPEG_NULL_ALGORITHM_HANDLE_ERROR,
+    JPEG_GETVERSION_NULL_BUF_POINTER_ERROR,
+    JPEG_IRES_RESOURCE_DESC_ERROR,
+    JPEG_IRES_RESOURCE_DESC_HANDLE_ERROR,
+    JPEG_NULL_STATUS_DATA_BUF,
+    JPEG_EXCEED_BYTES_CONSUMED_ERROR,
 
-  /* Extended Error Codes for Data Sync */
-  JPEG_INPUT_DATASYNC_NUMBLOCKS_ERROR,
-  JPEG_INPUT_DATASYNC_BUFF_POINTER_ERROR,
-  JPEG_INPUT_DATASYNC_BLOCKSIZE_ERROR,
-  JPEG_INPUT_DATASYNC_NOT_VALID,
+    /* Extended Error Codes for Data Sync */
+    JPEG_INPUT_DATASYNC_NUMBLOCKS_ERROR,
+    JPEG_INPUT_DATASYNC_BUFF_POINTER_ERROR,
+    JPEG_INPUT_DATASYNC_BLOCKSIZE_ERROR,
+    JPEG_INPUT_DATASYNC_NOT_VALID,
 
-  JPEG_OUTPUT_DATASYNC_NUMBLOCKS_ERROR,
+    JPEG_OUTPUT_DATASYNC_NUMBLOCKS_ERROR,
 
-  JPEG_SLICE_LEVEL_INPUT_NO_RST_MARKER_ERROR,
-  JPEG_DOWNSAMPLING_IN_NON_TILED_ERROR,
-  JPEG_DOWNSAMPLING_NOT_SUPPORTED_FORMAT_ERROR,
-  JPEG_DOWNSAMPLING_NOT_SUPPORTED_FEATURE_ERROR,
-  JPEG_THUMBNAIL_NOT_SUPPORTED_FEATURE_ERROR,
+    JPEG_SLICE_LEVEL_INPUT_NO_RST_MARKER_ERROR,
+    JPEG_DOWNSAMPLING_IN_NON_TILED_ERROR,
+    JPEG_DOWNSAMPLING_NOT_SUPPORTED_FORMAT_ERROR,
+    JPEG_DOWNSAMPLING_NOT_SUPPORTED_FEATURE_ERROR,
+    JPEG_THUMBNAIL_NOT_SUPPORTED_FEATURE_ERROR,
 
-  /* Extended Error Codes for Unsupported Resolution */
-  JPEG_NOT_SUPPORTED_WIDTH_ERROR,
-  JPEG_NOT_SUPPORTED_HEIGHT_ERROR,
-  JPEG_DECODE_LIMITED_PIXEL_RANGE_ERROR
+    /* Extended Error Codes for Unsupported Resolution */
+    JPEG_NOT_SUPPORTED_WIDTH_ERROR,
+    JPEG_NOT_SUPPORTED_HEIGHT_ERROR,
+    JPEG_DECODE_LIMITED_PIXEL_RANGE_ERROR
 }IjpegVDEC_ErrorStatus;
 /*
  *  ======== IJPEGVDEC_Params   ========
  *  Default parameter values for JPEGVDEC instance objects
  */
-extern const IJPEGVDEC_Params JPEGVDEC_TI_Static_Params;
+extern const IJPEGVDEC_Params    JPEGVDEC_TI_Static_Params;
 /*
  *  ======== IJPEGVDEC_DynamicParams ========
  *  Default dynamic parameter values for JPEGVDEC instance objects
  */
-extern const IJPEGVDEC_DynamicParams JPEGVDEC_TI_DynamicParams;
+extern const IJPEGVDEC_DynamicParams    JPEGVDEC_TI_DynamicParams;
 /* ------------------------------ macros ------------------------------------ */
 
 /****************************************************************
