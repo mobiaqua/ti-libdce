@@ -52,6 +52,7 @@ static int init(void);
 static void deinit(void);
 
 static int fd = -1;
+static int external_fd = 0;
 static struct omap_device *dev;
 static int ioctl_base;
 #define CMD(name) (ioctl_base + DRM_OMAP_DCE_##name)
@@ -75,7 +76,7 @@ uint32_t dce_debug = 3;
 #define DEBUG(FMT,...)   TRACE(2, "debug: " FMT, ##__VA_ARGS__)
 #define VERB(FMT,...)    TRACE(1, "verb: " FMT, ##__VA_ARGS__)
 
-void dce_set_fd(int dce_fd) { fd = dce_fd; }
+void dce_set_fd(int dce_fd) { external_fd = 1; fd = dce_fd; }
 int dce_get_fd () { return fd; }
 
 /*
@@ -490,8 +491,11 @@ static void deinit(void)
 
     omap_device_del(dev);
     dev = NULL;
-    close(fd);
+    if (!external_fd) {
+        close(fd);
+    }
     fd = -1;
+    external_fd = 0;
 
 out:
     pthread_mutex_unlock(&mutex);
