@@ -931,7 +931,7 @@ extern Engine_Error Engine_getNumMemSegs(Server_Handle server, Int *numSegs);
 /*
  *  ======== Engine_getNumEngines ========
  */
-extern Int Engine_getNumEngines();
+extern Int Engine_getNumEngines(Void);
 
 /*
  *  ======== Engine_getProcId ========

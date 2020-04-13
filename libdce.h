@@ -41,7 +41,7 @@
 void * dce_alloc(int sz);
 void dce_free(void *ptr);
 void dce_set_fd(int fd);
-int dce_get_fd();
+int dce_get_fd(void);
 
 /* avoid some messy stuff in xdc/std.h which pisses of gcc.. */
 #define xdc__ARGTOPTR
