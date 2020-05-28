@@ -74,7 +74,7 @@ typedef enum IRES_YieldResourceType {
 
 typedef Void (*IRES_ContextSaveFxn)(IALG_Handle algHandle, Void *contextArgs);
 typedef Void (*IRES_ContextRestoreFxn)
-        (IALG_Handle algHandle, Void *contextArgs);
+    (IALG_Handle algHandle, Void *contextArgs);
 
 /**
  *  @brief      Specifies the algorithm specific handles
@@ -86,7 +86,7 @@ typedef struct IRES_YieldContext {
     /**
      *  Handle of the algorithm instance issuing the "yield".
      */
-    IALG_Handle                algHandle;
+    IALG_Handle algHandle;
 
     /**
      *  Optional resource handle that may be used to yield a particular
@@ -94,7 +94,7 @@ typedef struct IRES_YieldContext {
      *  May be NULL when some other resource or ALL resources associated
      *  with an algorithm are to be yielded.
      */
-    IRES_Handle                resourceHandle;
+    IRES_Handle resourceHandle;
 
     /**
      *  The 'contextSave' function is implemented by the 'yielding' algorithm
@@ -107,7 +107,7 @@ typedef struct IRES_YieldContext {
      *  its persistent memory that it needs in the subsequent 'contextRestore'
      *  function call to re-initialize and activate its  scratch resources.
      */
-    IRES_ContextSaveFxn        contextSave;
+    IRES_ContextSaveFxn contextSave;
 
     /**
      *  The 'contextRestore' function is implemented by the 'yielding' algorithm
@@ -122,7 +122,7 @@ typedef struct IRES_YieldContext {
      *  the preceeding 'contextSave' call to re-initialize and activate its
      *  scratch resources.
      */
-    IRES_ContextRestoreFxn      contextRestore;
+    IRES_ContextRestoreFxn contextRestore;
 
     /**
      *  The arguments that must be passed when calling the 'contextSave()'
@@ -131,7 +131,7 @@ typedef struct IRES_YieldContext {
      *  supplies any 'contextArgs' that it wants the framework to passed to the
      *  'contextSave()' and  'contextRestore()' functions.
      */
-    Void                        *contextArgs;
+    Void *contextArgs;
 
 } IRES_YieldContext;
 
@@ -157,7 +157,7 @@ typedef Void *IRES_YieldArgs;
  *              provided by the yielding algorithm's IRES_YieldContext.
  */
 typedef Void (*IRES_YieldFxn)(IRES_YieldResourceType resourceType,
-    IRES_YieldContextHandle algYieldContext, IRES_YieldArgs yieldArgs);
+                              IRES_YieldContextHandle algYieldContext, IRES_YieldArgs yieldArgs);
 
 /**
  *  @brief      These fxns are used to query/grant the resources requested
@@ -178,7 +178,7 @@ typedef struct IRES_Fxns {
      *          by the algorithm instance.
      */
     IRES_Status (*getResourceDescriptors)(IALG_Handle handle,
-        IRES_ResourceDescriptor *resourceDescriptors);
+                                          IRES_ResourceDescriptor *resourceDescriptors);
 
     /**
      *  @brief  Query function to obtain the number of IRES resources
@@ -201,8 +201,8 @@ typedef struct IRES_Fxns {
      *          requested.
      */
     IRES_Status (*initResources)(IALG_Handle handle,
-            IRES_ResourceDescriptor * resourceDescriptor,
-            IRES_YieldFxn yieldFxn, IRES_YieldArgs yieldArgs);
+                                 IRES_ResourceDescriptor *resourceDescriptor,
+                                 IRES_YieldFxn yieldFxn, IRES_YieldArgs yieldArgs);
 
     /**
      *  @brief  Re-assignment function to grant the algorithm instance
@@ -215,15 +215,15 @@ typedef struct IRES_Fxns {
      *          activated via the activateResource call.
      */
     IRES_Status (*reinitResources)(IALG_Handle handle,
-            IRES_ResourceDescriptor * resourceDescriptor,
-            IRES_YieldFxn yieldFxn, IRES_YieldArgs yieldArgs);
+                                   IRES_ResourceDescriptor *resourceDescriptor,
+                                   IRES_YieldFxn yieldFxn, IRES_YieldArgs yieldArgs);
 
     /**
      *  @brief  Deinitialization function to revoke back the resources
      *          that have been granted to the algorithm instance.
      */
     IRES_Status (*deinitResources)(IALG_Handle handle,
-            IRES_ResourceDescriptor * resourceDescriptor);
+                                   IRES_ResourceDescriptor *resourceDescriptor);
 
     /**
      *  @brief  Resource Activation call to grant the algorithm instance
@@ -235,7 +235,7 @@ typedef struct IRES_Fxns {
      *          which resources truely require activation.
      */
     IRES_Status (*activateResource)(IALG_Handle handle,
-            IRES_Handle resourceHandle);
+                                    IRES_Handle resourceHandle);
 
     /**
      *  @brief  Resource Activation call to grant the algorithm instance
@@ -252,7 +252,7 @@ typedef struct IRES_Fxns {
      *          state during the next resource activation call.
      */
     IRES_Status (*deactivateResource)(IALG_Handle handle,
-            IRES_Handle resourceHandle);
+                                      IRES_Handle resourceHandle);
 
     /**
      *  @brief  Resource Deactivation call to revoke the algorithm instance's
@@ -260,7 +260,7 @@ typedef struct IRES_Fxns {
      *          Algorithm must save any context that is needed to restore the
      *          state during the next resource activation call.
      */
-     IRES_Status (*deactivateAllResources)(IALG_Handle handle);
+    IRES_Status (*deactivateAllResources)(IALG_Handle handle);
 
 } IRES_Fxns;
 
@@ -273,3 +273,4 @@ typedef struct IRES_Fxns {
 
 
 #endif  /* IRES_ */
+

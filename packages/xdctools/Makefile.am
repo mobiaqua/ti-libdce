@@ -3,4 +3,5 @@
 pkg_includedir = $(includedir)/dce
 
 nobase_pkg_include_HEADERS = \
-	xdc/std.h
+	xdc/std.h \
+	gnu/targets/std.h

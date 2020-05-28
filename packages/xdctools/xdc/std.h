@@ -1,10 +1,10 @@
-/* 
- *  Copyright (c) 2008 Texas Instruments. All rights reserved. 
- *  This program and the accompanying materials are made available under the 
+/*
+ *  Copyright (c) 2008-2016 Texas Instruments. All rights reserved.
+ *  This program and the accompanying materials are made available under the
  *  terms of the Eclipse Public License v1.0 and Eclipse Distribution License
  *  v. 1.0 which accompanies this distribution. The Eclipse Public License is
  *  available at http://www.eclipse.org/legal/epl-v10.html and the Eclipse
- *  Distribution License is available at 
+ *  Distribution License is available at
  *  http://www.eclipse.org/org/documents/edl-v10.php.
  *
  *  Contributors:
@@ -60,6 +60,7 @@ typedef const char      *xdc_CString;   /* null terminated immutable string */
 #ifdef __GNUC__
   #if __GNUC__ > 4 || (__GNUC__ == 4 && (__GNUC_MINOR__ >= 6))
     #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Wpragmas"
     #pragma GCC diagnostic ignored "-Wstrict-prototypes"
     typedef int             (*xdc_Fxn)();   /* function pointer */
     #pragma GCC diagnostic pop
@@ -84,6 +85,10 @@ typedef const char      *xdc_CString;   /* null terminated immutable string */
  */
 #ifdef __TI_COMPILER_VERSION__
 #include <ti/targets/select.h>
+#elif defined(__IAR_SYSTEMS_ICC__)
+#include <iar/targets/select.h>
+#elif defined(__GNUC__)
+#include <gnu/targets/select.h>
 #else
 /*
  * 'xdc_target_types__' must be defined to name a target-specific header
@@ -94,7 +99,7 @@ typedef const char      *xdc_CString;   /* null terminated immutable string */
  * add the following option to your compiler's command line:
  *    -Dxdc_target_types__=ti/targets/std.h
  */
-//#error xdc_target_types__ must be defined to name a target-specific header containing definitions of xdc_Int8, xdc_Int16, ...
+#error xdc_target_types__ must be defined to name a target-specific header containing definitions of xdc_Int8, xdc_Int16, ...
 
 /* the following definitions are required to keep the compiler from
  * complaining about references to these types in the rest of this header;
@@ -111,7 +116,7 @@ typedef unsigned int xdc_UInt32;
 #endif
 #endif
 
-/* Each modules' internal header file defines 'module' as 
+/* Each modules' internal header file defines 'module' as
  * xdc__MODOBJADDR__(Module__state__V), where Module__state__V is the actual
  * object where the module state is kept. For most targets, the default macro
  * given here results in the construct '(&Module__state__V)->field', when the
@@ -152,11 +157,17 @@ typedef unsigned long           xdc_ULLong;
  * for example.
  */
 #ifndef xdc__ARGTOPTR
+static xdc_Ptr xdc_iargToPtr(xdc_IArg a);
+static xdc_Ptr xdc_uargToPtr(xdc_UArg a);
+
 static inline xdc_Ptr xdc_iargToPtr(xdc_IArg a) { return ((xdc_Ptr)a); }
 static inline xdc_Ptr xdc_uargToPtr(xdc_UArg a) { return ((xdc_Ptr)a); }
 #endif
 
 #ifndef xdc__ARGTOFXN
+static xdc_Fxn xdc_iargToFxn(xdc_IArg a);
+static xdc_Fxn xdc_uargToFxn(xdc_UArg a);
+
 static inline xdc_Fxn xdc_iargToFxn(xdc_IArg a) { return ((xdc_Fxn)a); }
 static inline xdc_Fxn xdc_uargToFxn(xdc_UArg a) { return ((xdc_Fxn)a); }
 #endif
@@ -165,7 +176,7 @@ static inline xdc_Fxn xdc_uargToFxn(xdc_UArg a) { return ((xdc_Fxn)a); }
 /*
  * functions to efficiently convert a single precision float to an IArg
  * and vice-versa while maintaining client type safety
- * 
+ *
  * Here the assumption is that sizeof(Float) <= sizeof(IArg);
  */
 typedef union {
@@ -173,6 +184,7 @@ typedef union {
     xdc_IArg  a;
 } xdc_FloatData;
 
+static xdc_IArg xdc_floatToArg(xdc_Float f);
 static inline xdc_IArg xdc_floatToArg(xdc_Float f)
 {
      xdc_FloatData u;
@@ -181,6 +193,7 @@ static inline xdc_IArg xdc_floatToArg(xdc_Float f)
      return (u.a);
 }
 
+static xdc_Float xdc_argToFloat(xdc_IArg a);
 static inline xdc_Float xdc_argToFloat(xdc_IArg a)
 {
      xdc_FloatData u;
@@ -232,6 +245,7 @@ typedef xdc_Int16       Int16;
 typedef xdc_Int32       Int32;
 typedef xdc_Fxn         Fxn;
 typedef xdc_Ptr         Ptr;
+typedef xdc_CPtr        CPtr;
 #ifndef xdc__nolocalstring
 typedef xdc_String      String;
 #endif
@@ -242,7 +256,7 @@ typedef xdc_UInt16      UInt16;
 typedef xdc_UInt32      UInt32;
 
 /* DEPRECATED Aliases */
-#if !defined(xdc__strict)
+#if !defined(xdc__strict) && defined(xdc__deprecated_types)
 #define _TI_STD_TYPES
 
 /* xdc_Arg is defined only in ti/targets/std.h; use IArg and UArg instead */
@@ -326,7 +340,7 @@ typedef xdc_Bits64      Bits64;
  *  related functions into a single named sub-section (e.g.,
  *  "init-code")  If this macro is not defined by the target, an
  *  empty definition is used instead.
- */ 
+ */
 #ifndef xdc__CODESECT
 #define xdc__CODESECT(fn, sn)
 #endif
@@ -346,11 +360,11 @@ typedef xdc_Bits64      Bits64;
  *  as string constant in the current file.
  */
 #ifndef xdc__META
-#define xdc__META(n,s) __FAR__ const char (n)[] = {s}
+#define xdc__META(n,s) __FAR__ const char (n)[] = {(s)}
 #endif
 
 #endif /* xdc_std__include */
 /*
- *  @(#) xdc; 1, 1, 1,0; 6-23-2015 17:50:50; /db/ztree/library/trees/xdc/xdc-A75/src/packages/
+ *  @(#) xdc; 1, 1, 1,0; 8-8-2017 17:29:31; /db/ztree/library/trees/xdc/xdc-D20/src/packages/
  */
 

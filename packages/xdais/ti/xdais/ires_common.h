@@ -109,7 +109,7 @@ typedef enum IRES_RequestMode {
  */
 typedef struct IRES_ProtocolArgs {
 
-    Int32 size;                 /**< Size of this structure. */
+    Int32            size;      /**< Size of this structure. */
     IRES_RequestMode mode;      /**< Resource request mode.
                                  *
                                  *  @sa IRES_RequestMode
@@ -133,7 +133,7 @@ typedef struct IRES_ResourceDescriptor {
      *          based on the supplied @c resourceName, and uses the protocol to
      *          construct the IRES Resource Handle.
      */
-    struct IRES_ProtocolArgs  *protocolArgs;
+    struct IRES_ProtocolArgs *protocolArgs;
 
     /**
      *  @brief  The revision of the IRES_ResourceProtocol Interface expected
@@ -152,7 +152,7 @@ typedef struct IRES_ResourceDescriptor {
      *  The 'resource manager' allocates the resource and constructs the
      *  handle.
      */
-    struct IRES_Obj * handle;
+    struct IRES_Obj *handle;
 
 } IRES_ResourceDescriptor;
 
@@ -185,8 +185,8 @@ typedef struct IRES_Obj {
      *  This could include information like the register layer of the
      *  device etc.
      */
-    Void (*getStaticProperties) (struct IRES_Obj * resourceHandle,
-        IRES_Properties * resourceProperties);
+    Void (*getStaticProperties)(struct IRES_Obj *resourceHandle,
+                                IRES_Properties *resourceProperties);
 
 } IRES_Obj;
 
@@ -204,3 +204,4 @@ typedef struct IRES_Obj *IRES_Handle;
 /*@}*/
 
 #endif  /* IRES_COMMON_ */
+

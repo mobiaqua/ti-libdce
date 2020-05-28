@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2010, Texas Instruments Incorporated
+ * Copyright (c) 2013, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,26 +30,179 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef __DCE_H__
-#define __DCE_H__
+#ifndef __LIBDCE_H__
+#define __LIBDCE_H__
 
-/* other than the codec-engine API, you must use the following two functions
- * to allocate the data structures passed to codec-engine APIs (other than the
- * raw input/output buffers which should be passed as physical addresses in
- * TILER space (SSPtr))
- */
-void * dce_alloc(int sz);
-void dce_free(void *ptr);
-void dce_set_fd(int fd);
-int dce_get_fd(void);
+#define xdc_target_types__ gnu/targets/std.h
+#include <xdc/std.h>
+#include <ti/sdo/ce/Engine.h>
+#include <ti/sdo/ce/video3/viddec3.h>
+#include <ti/sdo/ce/video2/videnc2.h>
+#include <ti/sdo/ce/video2/viddec2.h>
 
-/* avoid some messy stuff in xdc/std.h which pisses of gcc.. */
+#if defined(BUILDOS_LINUX)
+/* avoid some messy stuff in xdc/std.h which leads to gcc issues */
 #define xdc__ARGTOPTR
 #define xdc__ARGTOFXN
+#endif /* BUILDOS_LINUX */
 
-struct omap_device * dce_init(void);
-void dce_deinit(struct omap_device *dev);
-#define XDM_MEMTYPE_BO 10
-#define XDM_MEMTYPE_BO_OFFSET 11
+/********************************** DCE Error Types **********************************/
+typedef enum dce_error_status {
+    DCE_EOK = 0,
+    DCE_EXDM_FAIL = -1,
+    DCE_EOUT_OF_MEMORY = -2,
+    DCE_EXDM_UNSUPPORTED = -3,
+    DCE_EIPC_CREATE_FAIL = -4,
+    DCE_EIPC_CALL_FAIL = -5,
+    DCE_EINVALID_INPUT = -6,
+    DCE_EOMAPDRM_FAIL = -7
+} dce_error_status;
 
-#endif /* __DCE_H__ */
+
+typedef enum rproc_info_type {
+    RPROC_CPU_LOAD = 0,
+    RPROC_TOTAL_HEAP_SIZE = 1,
+    RPROC_AVAILABLE_HEAP_SIZE = 2
+} rproc_info_type;
+
+/***************************** Memory Allocation/Free APIs *****************************/
+/*=====================================================================================*/
+/** dce_alloc               : Allocate the Data structures passed to codec-engine APIs
+ *                            except Input/Output buffers. This should be used for all
+ *                            Parameter allocation needed for IPU remote proc.
+ *
+ * @ param sz    [in]       : Size of memory to be allocated.
+ * @ return                 : Pointer to allocated memory.
+ */
+void *dce_alloc(int sz);
+
+/*=====================================================================================*/
+/** dsp_dce_alloc            : Allocate the Data structures passed to codec-engine APIs
+ *                             except Input/Output buffers. This should be used for all
+ *                             Parameter allocation needed for DSP remote proc.
+ *
+ * @ param sz    [in]       : Size of memory to be allocated.
+ * @ return                 : Pointer to allocated memory.
+ */
+void *dsp_dce_alloc(int sz);
+
+/*=====================================================================================*/
+/** dce_free                : Free the Data structures passed to codec-engine APIs
+ *                             except Input/Output buffers.
+ *
+ * @ param ptr   [in]       : Memory allocated by dce_alloc.
+ */
+void dce_free(void *ptr);
+
+/*=====================================================================================*/
+/** dsp_dce_free            : Free the memory
+ *
+ * @ param ptr   [in]       : memory allocated by dsp_dce_alloc .
+ */
+void dsp_dce_free(void *ptr);
+
+
+/*********************************** APIs for Linux ***********************************/
+/************************ Initialization/Deinitialization APIs ************************/
+/*=====================================================================================*/
+/** dce_init                : Initialize DCE. Only Linux applications are expected to call.
+ *
+ * @ return                 : Pointer to omap_device structure.
+ */
+void *dce_init(void);
+
+/*===============================================================*/
+/** dce_deinit          : Deinitialize DCE . Only Linux applications are expected to call.
+ *
+ * @ param dev    [in]      : Pointer to omap_device structure.
+ */
+void dce_deinit(void *dev);
+
+
+/** dce_ipc_init            : Initialize DCE IPC. this is required to setup mmRpc link.
+ *
+ * @ return                 : Error code.
+ */
+int dce_ipc_init(int core);
+
+/*===============================================================*/
+/** dce_ipc_deinit          : Deinitialize DCE IPC.
+ *
+ * @ param dev    [in]      : Core ID and engine Table Idx, or -1 if no engine exists
+ */
+void dce_ipc_deinit(int core, int tableIdx);
+
+/*===============================================================*/
+/** dce_ipc_recover         : Recover the DCE IPC in case of
+ *                            remote core crash.
+ */
+void dce_ipc_recover(void);
+
+/************************ Input/Output Buffer Lock/Unlock APIs ************************/
+/*=====================================================================================*/
+/** dce_buf_lock            : Pin or lock Tiler Buffers which would be used by the IVAHD codec
+ *                            as reference buffers. API is specific to GLP.
+ *
+ * @ param num    [in]      : Number of buffers to be locked.
+ * @ param handle [in]      : Pointer to array of DMA Buf FDs of the buffers to be locked.
+ * @ return                 : DCE error status is returned.
+ */
+int dce_buf_lock(int num, size_t *handle);
+
+/*=====================================================================================*/
+/** dce_buf_unlock          : Unpin or unlock Tiler Buffers which were locked to be used
+ *                            by the IVAHD codec as reference buffers. API is specific to GLP.
+ *
+ * @ param num    [in]      : Number of buffers to be locked.
+ * @ param handle [in]      : Pointer to array of DMA Buf FDs of the buffers to be locked.
+ * @ return                 : DCE error status is returned.
+ */
+int dce_buf_unlock(int num, size_t *handle);
+/************************ Input/Output Buffer Lock/Unlock APIs ************************/
+/*=====================================================================================*/
+/** dsp_dce_buf_lock            : Pin or lock Tiler Buffers which would be used by the DSP codec
+ *                            as reference buffers. API is specific to GLP.
+ *
+ * @ param num    [in]      : Number of buffers to be locked.
+ * @ param handle [in]      : Pointer to array of DMA Buf FDs of the buffers to be locked.
+ * @ return                 : DCE error status is returned.
+ */
+int dsp_dce_buf_lock(int num, size_t *handle);
+
+/*=====================================================================================*/
+/** dsp_dce_buf_unlock          : Unpin or unlock Tiler Buffers which were locked to be used
+ *                            by the DSP codec as reference buffers. API is specific to GLP.
+ *
+ * @ param num    [in]      : Number of buffers to be locked.
+ * @ param handle [in]      : Pointer to array of DMA Buf FDs of the buffers to be locked.
+ * @ return                 : DCE error status is returned.
+ */
+int dsp_dce_buf_unlock(int num, size_t *handle);
+
+
+/******************************* OMAPDRM Get/Set FD APIs *******************************/
+/*=====================================================================================*/
+/** dce_get_fd              : Get OMAP DRM File Descriptor.
+ *
+ * @ return                 : OMAP DRM File Descriptor.
+ */
+int dce_get_fd();
+
+/*=====================================================================================*/
+/** dce_set_fd              : Set OMAP DRM File Descriptor.
+ *
+ * @ param fd     [in]      : OMAP DRM File Descriptor.
+ */
+void dce_set_fd(int fd);
+
+
+ /*===============================================================*/
+/** get_rproc_info : Get Information from the Remote proc.
+ *
+ * @ param engine    [in]    : Engine Handle obtained in Engine_open() call.
+ * @ param info_type [in]    : Information type as defined in the rproc_info_type
++ */
+int32_t get_rproc_info(Engine_Handle engine, rproc_info_type info_type);
+
+#endif /* __LIBDCE_H__ */
+

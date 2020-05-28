@@ -8,6 +8,7 @@ nobase_pkg_include_HEADERS = \
 	ti/sdo/ce/ServerDefs.h \
 	ti/sdo/ce/video3/viddec3.h \
 	ti/sdo/ce/video2/videnc2.h \
+	ti/sdo/ce/video2/viddec2.h \
 	ti/sdo/ce/Server.h \
 	ti/sdo/ce/skel.h \
 	ti/sdo/ce/node/node.h \
