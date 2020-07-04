@@ -49,6 +49,7 @@
 
 static int             OmapDrm_FD  = INVALID_DRM_FD;
 static int             dce_init_count = 0;
+static int             external_fd = 0;
 struct omap_device    *OmapDev     = NULL;
 extern MmRpc_Handle    MmRpcHandle[];
 extern pthread_mutex_t    ipc_mutex;
@@ -87,8 +88,11 @@ void dce_deinit(void *dev)
     dev = NULL;
     if (--dce_init_count == 0) {
         DEBUG("Closing omapdrm device...");
-        close(OmapDrm_FD);
+        if (!external_fd) {
+            close(OmapDrm_FD);
+        }
         OmapDrm_FD = INVALID_DRM_FD;
+        external_fd = 0;
     }
     return;
 }
@@ -232,6 +236,7 @@ void dce_set_fd(int dce_fd)
 {
     if (OmapDrm_FD == INVALID_DRM_FD) {
         OmapDrm_FD = dce_fd;
+        external_fd = 1;
     }
     else {
         DEBUG("Cannot set the fd, omapdrm device fd is already set");
