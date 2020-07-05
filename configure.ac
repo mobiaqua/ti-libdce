@@ -51,7 +51,7 @@ PKG_CHECK_MODULES(DRM, libdrm libdrm_omap)
 
 dnl *** checks for libraries ***
 dnl Check for libmmrpc
-#PKG_CHECK_MODULES(MMRPC, libmmrpc)
+PKG_CHECK_MODULES(MMRPC, libmmrpc)
 
 dnl *** checks for header files ***
 dnl check if we have ANSI C header files
