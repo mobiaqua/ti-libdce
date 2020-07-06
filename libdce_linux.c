@@ -67,7 +67,8 @@ void *dce_init(void)
    /* Open omapdrm device only for the first dce_init call */
     if( dce_init_count == 1 ) {
         DEBUG("Open omapdrm device and initializing the mutex...");
-        OmapDrm_FD = drmOpenWithType("omapdrm", NULL, DRM_NODE_RENDER);
+        OmapDrm_FD = drmOpen("omapdrm", "platform:omapdrm:00");
+        //OmapDrm_FD = drmOpenWithType("omapdrm", NULL, DRM_NODE_RENDER);
         _ASSERT(OmapDrm_FD > 0, DCE_EOMAPDRM_FAIL);
 
         pthread_mutexattr_init(&attr);
