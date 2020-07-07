@@ -62,7 +62,7 @@ extern int dce_debug;
 
 #elif defined BUILDOS_LINUX
 #define TRACE(lvl,FMT, ...)  do if ((lvl) <= dce_debug) { \
-        printf("%s:%d:\t%s\t" FMT,__FILE__, __LINE__,__FUNCTION__ ,##__VA_ARGS__); \
+        printf(" %s:%s:%d\t\n" FMT, __FUNCTION__, __FILE__, __LINE__, ##__VA_ARGS__); \
 }while( 0 )
 
 #elif defined BUILDOS_ANDROID
@@ -83,7 +83,7 @@ extern int dce_debug;
 
 #define _ASSERT(_COND_, _ERRORCODE_) do { \
         if( !(_COND_)) { eError = _ERRORCODE_; \
-                         ERROR("Failed %s error val %d", # _COND_, _ERRORCODE_); \
+                         ERROR("Failed %s error val %d\n", # _COND_, _ERRORCODE_); \
                          goto EXIT; } \
 } while( 0 )
 
