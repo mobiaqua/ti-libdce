@@ -50,7 +50,7 @@ extern struct omap_device   *OmapDev;
 void *memplugin_alloc(int sz, int height, MemRegion region, int align, int flags)
 {
     MemHeader        *h;
-    struct omap_bo   *bo = omap_bo_new(OmapDev, sz + sizeof(MemHeader), OMAP_BO_WC);
+    struct omap_bo   *bo = omap_bo_new(OmapDev, sz + sizeof(MemHeader), OMAP_BO_WC | OMAP_BO_SCANOUT);
 
     if( !bo ) {
         return (NULL);
