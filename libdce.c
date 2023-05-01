@@ -61,6 +61,10 @@ pthread_mutex_t    ipc_mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_mutex_t    dce_callback_mutex  = PTHREAD_MUTEX_INITIALIZER;
 #endif
 
+#ifndef DCE_DEBUG_LEVEL
+#define DCE_DEBUG_LEVEL 0
+#endif
+
 static int      __ClientCount[MAX_REMOTEDEVICES] = {0};
 int             dce_debug = DCE_DEBUG_LEVEL;
 const String DCE_DEVICE_NAME[MAX_REMOTEDEVICES]= {"rpmsg-dce","rpmsg-dce-dsp"};
