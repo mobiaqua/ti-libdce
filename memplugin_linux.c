@@ -32,9 +32,14 @@
 
 #include "memplugin.h"
 #include "dce_priv.h"
+#include "libdce.h"
 
-extern struct omap_device   *OmapDev;
+extern int OmapDrm_FD;
 
+struct buffer_handle {
+    __u32 handle;
+    int   dmaFd;
+};
 
 /*  memplugin_alloc - allocates omap_bo buffer with a header above it.
  *  @sz: Size of the buffer requsted
@@ -50,18 +55,56 @@ extern struct omap_device   *OmapDev;
 void *memplugin_alloc(int sz, int height, MemRegion region, int align, int flags)
 {
     MemHeader        *h;
-    struct omap_bo   *bo = omap_bo_new(OmapDev, sz + sizeof(MemHeader), OMAP_BO_WC | OMAP_BO_SCANOUT);
 
-    if( !bo ) {
+    struct drm_mode_create_dumb creq = {
+        .height = sz + sizeof(MemHeader),
+        .width = 1,
+        .bpp = 8,
+    };
+    if (drmIoctl(OmapDrm_FD, DRM_IOCTL_MODE_CREATE_DUMB, &creq) < 0) {
         return (NULL);
     }
 
-    h = omap_bo_map(bo);
+    struct drm_mode_map_dumb mreq = {
+        .handle = creq.handle,
+    };
+    if (drmIoctl(OmapDrm_FD, DRM_IOCTL_MODE_MAP_DUMB, &mreq) < 0) {
+        struct drm_mode_destroy_dumb dreq = {
+            .handle = creq.handle,
+        };
+        drmIoctl(OmapDrm_FD, DRM_IOCTL_MODE_DESTROY_DUMB, &dreq);
+        return (NULL);
+    }
+
+    h = mmap(0, creq.size, PROT_READ | PROT_WRITE, MAP_SHARED, OmapDrm_FD, mreq.offset);
+    if (h == MAP_FAILED) {
+        struct drm_mode_destroy_dumb dreq = {
+            .handle = creq.handle,
+        };
+        drmIoctl(OmapDrm_FD, DRM_IOCTL_MODE_DESTROY_DUMB, &dreq);
+        return (NULL);
+    }
+
+    struct drm_prime_handle req = {
+        .handle = creq.handle,
+        .flags = DRM_CLOEXEC,
+    };
+    if (drmIoctl(OmapDrm_FD, DRM_IOCTL_PRIME_HANDLE_TO_FD, &req) < 0) {
+        struct drm_mode_destroy_dumb dreq = {
+            .handle = creq.handle,
+        };
+        drmIoctl(OmapDrm_FD, DRM_IOCTL_MODE_DESTROY_DUMB, &dreq);
+        return (NULL);
+    }
+
     memset(H2P(h), 0, sz);
     h->size = sz;
-    h->ptr = (void *)bo;
+    h->ptr = calloc(sizeof(struct buffer_handle), 1);
+    struct buffer_handle *bh = h->ptr;
+    bh->handle = creq.handle;
+    bh->dmaFd = req.fd;
     /* get the fd from drm which needs to be closed by memplugin_free */
-    h->dma_buf_fd = omap_bo_dmabuf(bo);
+    h->dma_buf_fd = dup(req.fd);
     h->region = region;
     h->flags = flags;/*Beware: This is a bit field.*/
     /* lock the file descriptor */
@@ -95,7 +138,14 @@ void memplugin_free(void *ptr)
             close(h->dma_buf_fd);
         }
         /*Finally, Delete the buffer object*/
-        omap_bo_del((struct omap_bo *)h->ptr);
+        struct buffer_handle *bh = h->ptr;
+        struct drm_mode_destroy_dumb dreq = {
+            .handle = bh->handle,
+        };
+        munmap(h, h->size + sizeof(MemHeader));
+        close(bh->dmaFd);
+        free(bh);
+        drmIoctl(OmapDrm_FD, DRM_IOCTL_MODE_DESTROY_DUMB, &dreq);
     }
 }
 

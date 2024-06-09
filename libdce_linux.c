@@ -35,10 +35,6 @@
 #include <stdio.h>
 #include <pthread.h>
 
-#include <xf86drm.h>
-#include <omap_drm.h>
-#include <omap_drmif.h>
-
 #include <ti/ipc/mm/MmRpc.h>
 #include "dce_priv.h"
 #include "libdce.h"
@@ -47,14 +43,12 @@
 
 #define INVALID_DRM_FD (-1)
 
-static int             OmapDrm_FD  = INVALID_DRM_FD;
+int                    OmapDrm_FD  = INVALID_DRM_FD;
 static int             dce_init_count = 0;
-static int             external_fd = 0;
-struct omap_device    *OmapDev     = NULL;
 extern MmRpc_Handle    MmRpcHandle[];
 extern pthread_mutex_t    ipc_mutex;
 
-void *dce_init(void)
+void dce_init(int drmFd)
 {
     dce_error_status    eError = DCE_EOK;
     pthread_mutexattr_t attr;
@@ -64,40 +58,25 @@ void *dce_init(void)
     /* Use this for refcount */
     dce_init_count++;
 
-   /* Open omapdrm device only for the first dce_init call */
+    /* Only for the first dce_init call */
     if( dce_init_count == 1 ) {
-        DEBUG("Open omapdrm device and initializing the mutex...");
-        if( OmapDrm_FD == INVALID_DRM_FD ) {
-            OmapDrm_FD = drmOpen("omapdrm", "platform:omapdrm:00");
-            //OmapDrm_FD = drmOpenWithType("omapdrm", NULL, DRM_NODE_RENDER);
-            _ASSERT(OmapDrm_FD > 0, DCE_EOMAPDRM_FAIL);
-        }
+        OmapDrm_FD = drmFd;
+        _ASSERT(OmapDrm_FD > 0, DCE_EOMAPDRM_FAIL);
 
+        DEBUG("Initializing the mutex...");
         pthread_mutexattr_init(&attr);
         pthread_mutexattr_settype(&attr, PTHREAD_MUTEX_RECURSIVE);
         pthread_mutex_init(&ipc_mutex, &attr);
     }
-
-    OmapDev = omap_device_new(OmapDrm_FD);
-    _ASSERT(OmapDev != NULL, DCE_EOMAPDRM_FAIL);
-
 EXIT:
-    return ((void *)OmapDev);
 }
 
-void dce_deinit(void *dev)
+void dce_deinit(void)
 {
-    omap_device_del(dev);
-    dev = NULL;
     if (--dce_init_count == 0) {
-        DEBUG("Closing omapdrm device...");
-        if (!external_fd) {
-            close(OmapDrm_FD);
-        }
+        DEBUG(" >> dce_deinit");
         OmapDrm_FD = INVALID_DRM_FD;
-        external_fd = 0;
     }
-    return;
 }
 
 int dce_buf_lock(int num, size_t *handle)
@@ -167,7 +146,7 @@ void *dsp_dce_alloc(int sz)
       Beware: The last argument is a bit field. As of now only core ID
       is considered to be there in the last 4 bits of the word.
     */
-    return (memplugin_alloc(sz, 1, MEM_TILER_1D, 0, DSP));
+    return (memplugin_alloc(sz, 1, DEFAULT_REGION, 0, DSP));
 }
 
 void dsp_dce_free(void *ptr)
@@ -234,20 +213,3 @@ EXIT:
     pthread_mutex_unlock(&ipc_mutex);
     return (eError);
 }
-/* Incase of X11 or Wayland the fd can be shared to libdce using this call */
-void dce_set_fd(int dce_fd)
-{
-    if (OmapDrm_FD == INVALID_DRM_FD) {
-        OmapDrm_FD = dce_fd;
-        external_fd = 1;
-    }
-    else {
-        DEBUG("Cannot set the fd, omapdrm device fd is already set");
-    }
-}
-
-int dce_get_fd(void)
-{
-    return (OmapDrm_FD);
-}
-

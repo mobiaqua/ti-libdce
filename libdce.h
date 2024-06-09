@@ -107,16 +107,14 @@ void dsp_dce_free(void *ptr);
 /*=====================================================================================*/
 /** dce_init                : Initialize DCE. Only Linux applications are expected to call.
  *
- * @ return                 : Pointer to omap_device structure.
+ * @ param drmFd    [in]    : DRM file handle.
  */
-void *dce_init(void);
+void dce_init(int drmFd);
 
 /*===============================================================*/
 /** dce_deinit          : Deinitialize DCE . Only Linux applications are expected to call.
- *
- * @ param dev    [in]      : Pointer to omap_device structure.
  */
-void dce_deinit(void *dev);
+void dce_deinit(void);
 
 
 /** dce_ipc_init            : Initialize DCE IPC. this is required to setup mmRpc link.
@@ -181,21 +179,6 @@ int dsp_dce_buf_unlock(int num, size_t *handle);
 
 
 /******************************* OMAPDRM Get/Set FD APIs *******************************/
-/*=====================================================================================*/
-/** dce_get_fd              : Get OMAP DRM File Descriptor.
- *
- * @ return                 : OMAP DRM File Descriptor.
- */
-int dce_get_fd();
-
-/*=====================================================================================*/
-/** dce_set_fd              : Set OMAP DRM File Descriptor.
- *
- * @ param fd     [in]      : OMAP DRM File Descriptor.
- */
-void dce_set_fd(int fd);
-
-
  /*===============================================================*/
 /** get_rproc_info : Get Information from the Remote proc.
  *

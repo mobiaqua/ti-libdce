@@ -6,6 +6,6 @@ includedir=@includedir@
 Name: libdce
 Description: distributed codec-engine
 Version: @VERSION@
-Requires: libdrm libdrm_omap
+Requires: libdrm
 Libs: -L${libdir} -ldce
 Cflags: -I${includedir}/dce

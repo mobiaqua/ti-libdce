@@ -47,7 +47,7 @@ AC_CHECK_PROG([HAVE_PKGCONFIG], [pkg-config], [yes], [no])
 
 dnl *** checks for libraries ***
 dnl Check for libdrm
-PKG_CHECK_MODULES(DRM, libdrm libdrm_omap)
+PKG_CHECK_MODULES(DRM, libdrm)
 
 dnl *** checks for libraries ***
 dnl Check for libmmrpc

@@ -39,9 +39,11 @@
 
 
 #if defined(BUILDOS_LINUX)
+#include <unistd.h>
+#include <fcntl.h>
+#include <drm/drm.h>
 #include <xf86drm.h>
-#include <omap_drm.h>
-#include <omap_drmif.h>
+#include <sys/mman.h>
 #define DEFAULT_REGION MEM_TILER_1D
 #endif
 
