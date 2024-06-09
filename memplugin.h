@@ -43,16 +43,6 @@
 #include <omap_drm.h>
 #include <omap_drmif.h>
 #define DEFAULT_REGION MEM_TILER_1D
-
-#elif defined(BUILDOS_QNX)
-/* IPC Headers */
-#include <tilermem.h>
-#include <SharedMemoryAllocatorUsr.h>
-#include <memmgr.h>
-#define DEFAULT_REGION MEM_SHARED
-
-#elif defined (BUILDOS_ANDROID)
-#define DEFAULT_REGION MEM_CARVEOUT
 #endif
 
 #define P2H(p) (&(((MemHeader *)(p))[-1]))
@@ -107,27 +97,6 @@ typedef enum mem_error_status {
 void *memplugin_alloc(int sz, int height, MemRegion region, int align, int flags);
 void memplugin_free(void *ptr);
 int32_t memplugin_share(void *ptr);
-
-#ifdef BUILDOS_ANDROID
-typedef enum BufAccessMode {
-    MemAccess_8Bit,
-    MemAccess_16Bit,
-    MemAccess_32Bit
-}BufAccessMode;
-
-typedef struct Mem_2DParams {
-    uint32_t nHeight;
-    uint32_t nWidth;
-    uint32_t nStride;
-    BufAccessMode eAccessMode;
-}Mem_2DParams;
-
-void *memplugin_alloc_noheader(MemHeader *memHdr, int sz, int height, MemRegion region, int align, int flags);
-void memplugin_free_noheader(MemHeader *memHdr);
-
-int memplugin_open();
-int memplugin_close();
-#endif
 
 #endif /* __MEMPLUGIN_H__ */
 

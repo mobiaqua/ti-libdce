@@ -204,7 +204,7 @@ static int __inline getCoreIndexFromEngine(Engine_Handle engine, int *tabIdx)
 }
 
 /***************** FUNCTIONS ********************************************/
-/* Interface for QNX/Linux for parameter buffer allocation                    */
+/* Interface for parameter buffer allocation                            */
 /* These interfaces are implemented to maintain Backward Compatability  */
 void *dce_alloc(int sz)
 {
@@ -484,7 +484,6 @@ Engine_Handle Engine_open(String name, Engine_Attrs *attrs, Engine_Error *ec)
 
     INFO(">> Engine_open Params::name = %s size = %d\n", name, strlen(name));
     /* Allocate Shared memory for the engine_open rpc msg structure*/
-    /* Tiler Memory preferred in QNX */
     engine_open_msg = memplugin_alloc(sizeof(dce_engine_open), 1, DEFAULT_REGION, 0, coreIdx);
     _ASSERT_AND_EXECUTE(engine_open_msg != NULL, DCE_EOUT_OF_MEMORY, engine_handle = NULL);
 
@@ -813,11 +812,6 @@ static XDAS_Int32 process(void *codec, void *inBufs, void *outBufs,
     int                 numXltAry, numParams;
     int                 coreIdx = INVALID_CORE;
 
-#ifdef BUILDOS_ANDROID
-    int32_t    inbuf_offset[MAX_INPUT_BUF];
-    int32_t    outbuf_offset[MAX_OUTPUT_BUF];
-#endif
-
     _ASSERT(codec != NULL, DCE_EINVALID_INPUT);
     _ASSERT(inBufs != NULL, DCE_EINVALID_INPUT);
     _ASSERT(outBufs != NULL, DCE_EINVALID_INPUT);
@@ -873,17 +867,9 @@ static XDAS_Int32 process(void *codec, void *inBufs, void *outBufs,
          } else if( codec_id == OMAP_DCE_VIDDEC2 ) {
               data_buf = (void * *)(&(((XDM1_BufDesc *)inBufs)->descs[count].buf));
          }
-#ifdef BUILDOS_ANDROID
-        inbuf_offset[count] = ((MemHeader*)(*data_buf))->offset;
-        Fill_MmRpc_fxnCtx_Xlt_Array(&(fxnCtx.xltAry[total_count]), INBUFS_INDEX, MmRpc_OFFSET((int32_t)inBufs,
-                                    (int32_t)data_buf), (size_t)(*data_buf),
-                                    (size_t)(((MemHeader*)(*data_buf))->dma_buf_fd));
-        *data_buf += inbuf_offset[count];
-#else
         Fill_MmRpc_fxnCtx_Xlt_Array(&(fxnCtx.xltAry[total_count]), INBUFS_INDEX,
                                     MmRpc_OFFSET((int32_t)inBufs, (int32_t)data_buf),
                                     (size_t)*data_buf, (size_t)*data_buf);
-#ifdef BUILDOS_LINUX
         /*Single planar input buffer for Encoder. No adjustments needed for Multiplanar case*/
         if( count == CHROMA_BUF && codec_id == OMAP_DCE_VIDENC2 && ((IVIDEO2_BufDesc *)inBufs)->planeDesc[LUMA_BUF].buf == ((IVIDEO2_BufDesc *)inBufs)->planeDesc[CHROMA_BUF].buf ) {
             if( ((IVIDEO2_BufDesc *)inBufs)->planeDesc[count].memType == XDM_MEMTYPE_RAW ||
@@ -893,8 +879,6 @@ static XDAS_Int32 process(void *codec, void *inBufs, void *outBufs,
                 *data_buf += ((IVIDEO2_BufDesc *)inBufs)->planeDesc[LUMA_BUF].bufSize.tileMem.width *
                                 ((IVIDEO2_BufDesc *)inBufs)->planeDesc[LUMA_BUF].bufSize.tileMem.height;
         }
-#endif //BUILDOS_LINUX
-#endif //BUILDOS_ANDROID
     }
 
     /* Output Buffers */
@@ -903,20 +887,10 @@ static XDAS_Int32 process(void *codec, void *inBufs, void *outBufs,
             if( ((XDM2_BufDesc *)outBufs)->descs[LUMA_BUF].buf != ((XDM2_BufDesc *)outBufs)->descs[CHROMA_BUF].buf ) {
                 /* Either Encode usecase or MultiPlanar Buffers for Decode usecase */
                 data_buf = (void * *)(&(((XDM2_BufDesc *)outBufs)->descs[count].buf));
-#ifdef BUILDOS_ANDROID
-                outbuf_offset[count] = ((MemHeader*)(*data_buf))->offset;
-                Fill_MmRpc_fxnCtx_Xlt_Array(&(fxnCtx.xltAry[total_count]), OUTBUFS_INDEX, MmRpc_OFFSET((int32_t)outBufs,
-                                            (int32_t)data_buf), (size_t)(*data_buf),
-                                            (size_t)(((MemHeader*)(*data_buf))->dma_buf_fd));
-                *data_buf += outbuf_offset[count];
-
-#else
                 Fill_MmRpc_fxnCtx_Xlt_Array(&(fxnCtx.xltAry[total_count]), OUTBUFS_INDEX,
                                             MmRpc_OFFSET((int32_t)outBufs, (int32_t)data_buf),
                                             (size_t)*data_buf, (size_t)*data_buf);
-#endif
               }
-#if defined(BUILDOS_LINUX)
               else {
                    /* SinglePlanar Buffers for Decode usecase*/
                    data_buf = (void * *)(&(((XDM2_BufDesc *)outBufs)->descs[count].buf));
@@ -934,7 +908,6 @@ static XDAS_Int32 process(void *codec, void *inBufs, void *outBufs,
                         }
                    }
               }
-#endif
          } else if( codec_id == OMAP_DCE_VIDDEC2 ) {
               if( count == LUMA_BUF ) {
                    buf_arry = (void * *)(&(((XDM_BufDesc *)outBufs)->bufs));
@@ -967,24 +940,6 @@ static XDAS_Int32 process(void *codec, void *inBufs, void *outBufs,
     /* Invoke the Remote function through MmRpc */
     eError = MmRpc_call(MmRpcHandle[coreIdx], &fxnCtx, &fxnRet);
     _ASSERT(eError == DCE_EOK, DCE_EIPC_CALL_FAIL);
-
-#ifdef BUILDOS_ANDROID
-    for( count = 0; count < numInBufs; count++ ) {
-        if( codec_id == OMAP_DCE_VIDDEC3 ) {
-            /* restore the actual buf ptr before returing to the mmf */
-            data_buf = (void * *)(&(((XDM2_BufDesc *)inBufs)->descs[count].buf));
-        } else if( codec_id == OMAP_DCE_VIDDEC2 ) {
-            /* restore the actual buf ptr before returing to the mmf */
-            data_buf = (void * *)(&(((XDM1_BufDesc *)inBufs)->descs[count].buf));
-        }
-        *data_buf -= inbuf_offset[count];
-    }
-    for (count = 0; count < numOutBufs; count++){
-        data_buf = (void * *)(&(((XDM2_BufDesc *)outBufs)->descs[count].buf));
-        *data_buf -= outbuf_offset[count];
-    }
-#endif
-
     eError = (dce_error_status)(fxnRet);
 
 EXIT:

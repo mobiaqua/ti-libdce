@@ -70,19 +70,13 @@ XDAS_Int32 VIDDEC3_control(VIDDEC3_Handle codec, VIDDEC3_Cmd id,
  * @ param codec   [in]  : Codec Handle obtained in VIDDEC3_create() call.
  * @ param inBufs  [in]  : Pointer to Input Buffer Descriptor structure
  *                         of codec allocated using dce_alloc() API.
- *                         inBufs->descs[0].buf should have a virtual pointer
- *                         to the Input Buffer in QNX. In Linux, it
- *                         should have a DMA Buf FD to the Input Buffer.
- *                         In Android, it should have the memheader pointer
- *                         and the memheader->offset should have
- *                         the offset for the actual data within the input buffer;
- *                         memheader->offset = pInBufHeader->nOffset;
+ *                         inBufs->descs[0].buf it should have a DMA Buf FD
+ *                         to the Input Buffer.
  * @ param outBufs [in]  : Pointer to Output Buffer Descriptor structure
  *                         of codec allocated using dce_alloc() API.
  *                         outBufs->descs[0].buf and outBufs->descs[1].buf
  *                         should have virtual pointers to the Output
- *                         Luma and Chroma Buffers respectively in QNX.
- *                         In Linux these fields should have
+ *                         These fields should have
  *                         DMA Buf FDs to the Output Buffers. In Android
  *                         these fields should have the memheader pointer,
  *                         and the memheader->offset should have the offset
@@ -159,13 +153,11 @@ XDAS_Int32 VIDENC2_control(VIDENC2_Handle codec, VIDENC2_Cmd id,
  *                         of codec allocated using dce_alloc() API.
  *                         inBufs->planeDesc[0].buf and inBufs->planeDesc[1].buf
  *                         should have virtual pointers to the Output
- *                         Luma and Chroma Buffers respectively in QNX.
- *                         In Linux/Android, these fields should have
+ *                         These fields should have
  *                         DMA Buf FDs to the Output Buffers.
  * @ param outBufs [in]  : Pointer to Output Buffer Descriptor structure
  *                         of codec allocated using dce_alloc() API.
- *                         OutBufs->descs[0].buf should have a virtual pointer
- *                         to the Input Buffer in QNX. In Linux/Android, it
+ *                         OutBufs->descs[0].buf it
  *                         should have a DMA Buf FD to the Input Buffer.
  * @ param inArgs  [in]  : Pointer to Input Arguments structure
  *                         of codec allocated using dce_alloc() API.
@@ -236,13 +228,7 @@ If (BUILDOS_LINUX) {
     Fill outArgs
 
     while(end of stream) {
-        if(BUILDOS_QNX) {
-
-            inBufs->descs[0].buf = virtual pointer of Input Buffer
-            outBufs->descs[0].buf = virtual pointer of Output Luma Buffer
-            outBufs->descs[1].buf = virtual pointer of Output Chroma Buffer
-
-        } else if (BUILDOS_LINUX || BUILDOS_ANDROID) {
+        if (BUILDOS_LINUX) {
 
             inBufs->descs[0].buf = DMA Buf FD of Input Buffer
 

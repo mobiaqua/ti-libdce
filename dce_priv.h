@@ -54,23 +54,11 @@ extern int dce_debug;
 #define INFO(FMT,...)
 #endif
 
-#ifdef BUILDOS_QNX
-#include <sys/slog.h>
-#define TRACE(lvl,FMT, ...)  do if ((lvl) <= dce_debug) { \
-        slogf(42, _SLOG_INFO, "%s:%d:\t%s\t" FMT, __FILE__, __LINE__, __FUNCTION__, ##__VA_ARGS__); \
-} while( 0 )
-
-#elif defined BUILDOS_LINUX
+#if defined BUILDOS_LINUX
 #define TRACE(lvl,FMT, ...)  do if ((lvl) <= dce_debug) { \
         printf(" %s:%s:%d\t\n" FMT, __FUNCTION__, __FILE__, __LINE__, ##__VA_ARGS__); \
 }while( 0 )
 
-#elif defined BUILDOS_ANDROID
-#include <utils/Log.h>
-#define LOG_TAG "libdce"
-#define TRACE(lvl,FMT, ...)  do if ((lvl) <= dce_debug) { \
-        ALOGE("%s:%d:\t%s\t" FMT,__FILE__, __LINE__,__FUNCTION__ ,##__VA_ARGS__); \
-}while( 0 )
 #endif
 
 /***************** ASSERT MACROS *********************/
